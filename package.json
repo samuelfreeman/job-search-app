@@ -1,0 +1,33 @@
+{
+  "name": "job-search-app",
+  "version": "1.0.0",
+  "description": "A job search app for users to find a job ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "launch": "node server.js",
+    "generate": "npx prisma generate",
+    "migrate:dev": "npx prisma migrate dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuelfreeman/job-search-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samuelfreeman/job-search-app/issues"
+  },
+  "homepage": "https://github.com/samuelfreeman/job-search-app#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "method-override": "^3.0.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.8.1"
+  }
+}
