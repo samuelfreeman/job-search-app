@@ -12,6 +12,8 @@ require("dotenv").config();
 
 const cors = require("cors");
 
+const appRoute = require("./src/routes/index");
+
 const app = express();
 const port = 3000;
 
@@ -24,6 +26,8 @@ app.use(methodOverride());
 app.use(compression());
 
 app.use(helmet());
+
+app.use("/api", appRoute);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

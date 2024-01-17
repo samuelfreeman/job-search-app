@@ -4,6 +4,6 @@ const indexRoute = route;
 
 const authRouter = require("./admin.js");
 
-indexRoute.use(authRouter);
+indexRoute.use("/admin",authRouter);
 
 module.exports = indexRoute;
