@@ -5,7 +5,7 @@ const prisma = require("../utils/prisma");
 // function to check if user exists before moving to the next function
 const checkUserExits = async (email) => {
   try {
-    const user = prisma.user.findFirst({
+    const user = prisma.admin.findFirst({
       where: {
         email,
       },

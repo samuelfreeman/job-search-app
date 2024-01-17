@@ -11,6 +11,7 @@ const jwt = require("../utils/token");
 exports.register = async (req, res, next) => {
   const data = req.body;
   const checkUserExits = await checkUser(data.email);
+  
   if (checkUserExits) {
     logger.error("User has already registered!");
     res.status(400).json({

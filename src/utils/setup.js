@@ -9,7 +9,11 @@ const data = {
 exports.run = async () => {
   try {
     console.log("Checking for super admin");
-    const findUsers = await prisma.admin.findMany({});
+    const findUsers = await prisma.admin.findMany({
+      where: {
+        email: "super@gmail.com",
+      },
+    });
     if (findUsers.length === 0) {
       const admin = await prisma.admin.create({
         data,
