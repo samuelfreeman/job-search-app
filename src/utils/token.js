@@ -11,3 +11,6 @@ exports.signToken = async (payload) => {
     return logger.error(error);
   }
 };
+exports.logout   = async loggedout =>{
+return jwt.sign({loggedout},process.env, {expiresIn:60})
+}
