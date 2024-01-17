@@ -1,7 +1,7 @@
 const { route } = require("../utils/expressRouter.js");
 
 const authRouter = route;
-const user = require("../controller/auth");
+const user = require("../controllers/admin.js");
 
 
 authRouter.post("/signUp", user.register);
