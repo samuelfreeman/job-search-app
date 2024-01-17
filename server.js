@@ -8,6 +8,8 @@ const compression = require("compression");
 
 const methodOverride = require("method-override");
 
+require("dotenv").config();
+
 const cors = require("cors");
 
 const app = express();
