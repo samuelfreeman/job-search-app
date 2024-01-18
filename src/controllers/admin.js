@@ -7,11 +7,12 @@ const logger = require("../utils/logger");
 const checkUser = require("../verification/user");
 
 const jwt = require("../utils/token");
+const { error } = require("winston");
 
 exports.register = async (req, res, next) => {
   const data = req.body;
   const checkUserExits = await checkUser(data.email);
-  
+
   if (checkUserExits) {
     logger.error("User has already registered!");
     res.status(400).json({
@@ -31,8 +32,9 @@ exports.register = async (req, res, next) => {
         user,
         AccessToken: token,
       });
-    } catch (e) {
-      logger.error(e);
+    } catch (error) {
+      console.log(error);
+      logger.error(error);
       next();
     }
   }
@@ -63,8 +65,99 @@ exports.login = async (req, res, next) => {
         });
       }
     }
-  } catch (e) {
-    logger.error(e);
+  } catch (error) {
+    console.log(error);
+    logger.error(error);
+    next();
+  }
+};
+
+exports.getAdmin = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const admin = await prisma.admin.findFirst({
+      where: {
+        id,
+      },
+    });
+    delete admin.password;
+    res.status(200).json({
+      status: "Success",
+      admin,
+    });
+  } catch (error) {
+    console.log(error);
+    logger.error(error);
+    next();
+  }
+};
+exports.getAllAdmins = async (req, res, next) => {
+  try {
+    const admin = await prisma.admin.findMany({});
+    delete admin.password;
+    res.status(200).json({
+      status: "Success",
+      admins: admin,
+    });
+  } catch (error) {
+    console.log(error);
+    logger.error(error);
+    next();
+  }
+};
+
+exports.updateAdmin = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    data.password = await bcrypt.hash(data.password);
+    const admin = await prisma.admin.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!admin) {
+      res.status(400).json({
+        error: "Admin not found!",
+      });
+    } else {
+      const admin = await prisma.admin.update({
+        where: {
+          id,
+        },
+        data,
+      });
+      delete admin.password;
+      res.status(200).json({
+        status: "Success",
+        admin,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    logger.error(error);
+    next();
+  }
+};
+
+exports.deleteAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const admin = await prisma.admin.delete({
+      where: {
+        id,
+      },
+    });
+    delete admin.password;
+    res.status(200).json({
+      status: "success",
+      message: "Admin deleted",
+      admin,
+    });
+  } catch (error) {
+    console.log(error);
+    logger.error(error);
     next();
   }
 };

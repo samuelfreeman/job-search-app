@@ -1,13 +1,13 @@
 const { Router } = require("express");
-const route = Router();
+const adminRoute = Router();
 
-const authRouter = route;
 const user = require("../controllers/admin.js");
 
-authRouter.post("/signUp", user.register);
-authRouter.post("/login", user.login);
-authRouter.get("/test", (req, res) => {
-  res.statusCode(200);
-});
+adminRoute.post("/signUp", user.register);
+adminRoute.post("/login", user.login);
+adminRoute.patch("/:id", user.updateAdmin);
+adminRoute.delete("/:id", user.deleteAdmin);
+adminRoute.get("/", user.getAllAdmins);
+adminRoute.get("/:id", user.getAdmin);
 
-module.exports = authRouter;
+module.exports = adminRoute;
