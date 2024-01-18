@@ -15,7 +15,18 @@ model admin {
   fullname  String
   email     String   @unique
   password  String
-  telephone String
+  telephone String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model user {
+  id        String   @id @default(uuid())
+  fullname  String
+  email     String   @unique
+  password  String
+  telephone String?
+  resume    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
