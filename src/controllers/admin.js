@@ -4,14 +4,13 @@ const bcrypt = require("../utils/bcrypt");
 
 const logger = require("../utils/logger");
 
-const checkUser = require("../verification/user");
+const { checkAdminExists } = require("../verification/user");
 
 const jwt = require("../utils/token");
-const { error } = require("winston");
 
 exports.register = async (req, res, next) => {
   const data = req.body;
-  const checkUserExits = await checkUser(data.email);
+  const checkUserExits = await checkAdminExists(data.email);
 
   if (checkUserExits) {
     logger.error("User has already registered!");

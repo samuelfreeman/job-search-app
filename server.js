@@ -44,6 +44,13 @@ app.use(async (req, res, next) => {
     })
   );
 });
+
+app.use((error, req, res, next) => {
+  res.status(error.status).json({
+    status: error.status,
+    message: error.message,
+  });
+});
 run();
 app.listen(port, () => {
   console.log(`server heard on port ${port}`);
