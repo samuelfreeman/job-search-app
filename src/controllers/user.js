@@ -1,174 +1,292 @@
-const prisma = require("../utils/prisma");
+const prisma = require('../utils/prisma');
+const bcrypt = require('../utils/bcrypt');
+const logger = require('../utils/logger');
+const { checkUserExits } = require('../verification/user');
+const jwt = require('../utils/token');
 
-const bcrypt = require("../utils/bcrypt");
-
-const logger = require("../utils/logger");
-
-const { checkUserExits } = require("../verification/user");
-
-const jwt = require("../utils/token");
-
+// Controller to register a new user
 exports.register = async (req, res, next) => {
   const data = req.body;
   const checkUserExit = await checkUserExits(data.email);
 
   if (checkUserExit) {
-    logger.error("User has already registered!");
+    logger.error('User has already registered!');
     res.status(400).json({
-      message: "User account Already Exits!",
+      message: 'User account Already Exists!',
     });
   } else {
     try {
       data.password = await bcrypt.hash(data.password);
+
+      // Create a new user
       const user = await prisma.user.create({
         data,
       });
-      logger.info("User registered succesfully!");
-      const token = await jwt.signToken(user.id);
+
+      // Generate JWT token for the user
+      const token = await jwt.userSignToken(user.id);
+
+      // Remove password before sending the response
       delete user.password;
+
+      // Respond with success message, user information, and access token
       res.status(201).json({
-        Status: "success",
+        Status: 'success',
         user,
         AccessToken: token,
       });
     } catch (error) {
-      console.log(error);
+      // Log and pass the error to the next middleware
+
       logger.error(error);
-      next();
+      next(error);
     }
   }
 };
 
+// Controller to log in a user
 exports.login = async (req, res, next) => {
   try {
     const data = req.body;
-    const userExits = await checkUserExits(data.email);
-    if (!userExits) {
-      logger.error("User account not found!");
+
+    // Check if the user exists
+    const user = await checkUserExits(data.email);
+
+    if (!user) {
+      logger.error('User account not found!');
       res.status(404).json({
-        message: "User not found!",
+        message: 'User not found!',
       });
     } else {
-      const checkPass = await bcrypt.compare(data.password, userExits.password);
+      // Check if the password is correct
+      const checkPass = await bcrypt.compare(data.password, user.password);
+
       if (!checkPass) {
-        logger.error("User Password or Email incorrect!");
+        logger.error('User Password or Email incorrect!');
         res.status(422).json({
-          message: "Invalid credentials!",
+          message: 'Invalid credentials!',
         });
       } else {
-        const token = await jwt.signToken(userExits.id);
-        logger.info("User logged in succesfully!");
+        // Generate JWT token for the logged-in user
+        const token = await jwt.userSignToken(user.id);
+
+        logger.info('User logged in successfully!');
+
+        // Respond with success message and access token
         res.status(200).json({
-          message: "User succesfully logged in!",
+          message: 'User successfully logged in!',
           AccessToken: token,
         });
       }
     }
   } catch (error) {
-    console.log(error);
+    // Log and pass the error to the next middleware
+
     logger.error(error);
-    next();
+    next(error);
   }
 };
 
+// Controller to get a user by ID
 exports.getUser = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Retrieve a user by ID
     const user = await prisma.user.findFirst({
       where: {
         id,
       },
     });
+
+    // Remove password before sending the response
     delete user.password;
+
+    // Respond with success message and user information
     res.status(200).json({
-      status: "Success",
+      status: 'Success',
       user,
     });
   } catch (error) {
-    console.log(error);
-    logger.error(error);
-    next();
-  }
-};
-exports.getAllUser = async (req, res, next) => {
-  try {
-    const user = await prisma.user.findMany({});
-    delete user.password;
-    res.status(200).json({
-      status: "Success",
-      users: user,
-    });
-  } catch (error) {
-    console.log(error);
+    // Log and pass the error to the next middleware
+
     logger.error(error);
     next();
   }
 };
 
+// Controller to get all users
+exports.getAllUser = async (req, res, next) => {
+  try {
+    // Retrieve all users
+    const users = await prisma.user.findMany({});
+
+    // Remove password before sending the response
+    users.forEach((users) => delete users.password);
+
+    // Respond with success message and the list of users
+    res.status(200).json({
+      status: 'Success',
+      users,
+    });
+  } catch (error) {
+    // Log and pass the error to the next middleware
+
+    logger.error(error);
+    next(error);
+  }
+};
+
+// Controller to get all applied jobs by a user
+exports.getAppliedJobs = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Retrieve all applied jobs by a user
+    const applied = await prisma.user.findMany({
+      where: {
+        id,
+      },
+      include: {
+        appliedJobs: {
+          where: {
+            userId: id,
+          },
+          include: {
+            job: true,
+          },
+        },
+      },
+    });
+
+    // Respond with the list of applied jobs
+    res.status(200).json({
+      appliedJobs: applied,
+    });
+  } catch (error) {
+    // Log and pass the error to the next middleware
+
+    logger.error(error);
+    next(error);
+  }
+};
+
+// Controller to update a user by ID
 exports.updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
     data.password = await bcrypt.hash(data.password);
+
+    // Find the user by ID
     const user = await prisma.user.findFirst({
       where: {
         id,
       },
     });
 
+    // Check if the user exists
     if (!user) {
       res.status(400).json({
-        error: "User not found!",
+        error: 'User not found!',
       });
     } else {
-      const user = await prisma.user.update({
+      // Update the user with new data
+      const updatedUser = await prisma.user.update({
         where: {
           id,
         },
         data,
       });
-      delete user.password;
+
+      // Remove password before sending the response
+      delete updatedUser.password;
+
+      // Respond with success message and updated user information
       res.status(200).json({
-        status: "Success",
-        user,
+        status: 'Success',
+        user: updatedUser,
       });
     }
   } catch (error) {
-    console.log(error.message);
+    // Log and pass the error to the next middleware
+
     logger.error(error);
-    next();
+    next(error);
   }
 };
 
-exports.deleteUser = async (req, res) => {
+// Controller to get all  applications by a user with status
+exports.getAllApplicationsByStatus = async (req, res, next) => {
+  try {
+    const { id, status } = req.params;
+
+    // Retrieve all accepted applications by a user
+    const applications = await prisma.application.findMany({
+      where: {
+        AND: [
+          {
+            userId: id,
+            status,
+          },
+        ],
+      },
+      include: {
+        job: true,
+      },
+    });
+
+    // Respond with the list of accepted applications
+    res.status(200).json({
+      applications,
+    });
+  } catch (error) {
+    // Log and pass the error to the next middleware
+
+    logger.error(error);
+    next(error);
+  }
+};
+
+// Controller to delete a user by ID
+exports.deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Find the user by ID
     const user = await prisma.user.findFirst({
       where: {
         id,
       },
     });
 
+    // Check if the user exists
     if (!user) {
       res.status(400).json({
-        error: "User not found!",
+        error: 'User not found!',
       });
     } else {
-      const user = await prisma.user.delete({
+      // Delete the user by ID
+      const deletedUser = await prisma.user.delete({
         where: {
           id,
         },
       });
-      delete user.password;
+
+      // Remove password before sending the response
+      delete deletedUser.password;
+
+      // Respond with success message and deleted user information
       res.status(200).json({
-        status: "success",
-        message: "User deleted",
-        user,
+        status: 'success',
+        message: 'User deleted',
+        user: deletedUser,
       });
     }
   } catch (error) {
-    console.log(error);
+    // Log and pass the error to the next middleware
+
     logger.error(error);
-    next();
+    next(error);
   }
 };

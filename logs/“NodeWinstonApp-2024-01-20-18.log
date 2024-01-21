@@ -1,0 +1,49 @@
+2024-01-20T18:26:30.084Z [31merror[39m:	
+Invalid `prisma.cartegory.findFirst()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:23:46
+
+  20 exports.jobsAppliedbyCartegory = async (req, res, next) => {
+  21   try {
+  22     const { id } = req.params;
+→ 23     const cartegory = await prisma.cartegory.findFirst({
+           where: {
+             AND: [
+               {
+                 id: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+                 jobs: {
+                   some: {
+                     application: {
+                       some: {
+                         status: {
+                           not: null
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+             ]
+           },
+           include: {
+             jobs: {
+               include: {
+                 application: {
+                   some: {
+                   ~~~~
+                     status: {
+                       not: null
+                     }
+                   },
+         ?         where?: applicationWhereInput,
+         ?         orderBy?: applicationOrderByWithRelationInput[] | applicationOrderByWithRelationInput,
+         ?         cursor?: applicationWhereUniqueInput,
+         ?         take?: Int,
+         ?         skip?: Int,
+         ?         distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
+                 }
+               }
+             }
+           }
+         })
+
+Unknown argument `some`. Did you mean `take`? Available options are marked with ?.

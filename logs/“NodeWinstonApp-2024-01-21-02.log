@@ -1,0 +1,19 @@
+2024-01-21T02:20:00.744Z [31merror[39m:	Admin not found!
+2024-01-21T02:20:00.744Z [31merror[39m:		Admin not found!
+2024-01-21T02:24:37.676Z [31merror[39m:	User Password or Email incorrect!
+2024-01-21T02:31:05.223Z [31merror[39m:	user is not defined
+2024-01-21T02:31:05.231Z [31merror[39m:	Converting circular structure to JSON
+    --> starting at object with constructor 'DerivedLogger'
+    |     property '_readableState' -> object with constructor 'ReadableState'
+    |     property 'pipes' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'DailyRotateFile'
+    --- property 'parent' closes the circle
+2024-01-21T02:31:05.231Z [31merror[39m:		Converting circular structure to JSON
+    --> starting at object with constructor 'DerivedLogger'
+    |     property '_readableState' -> object with constructor 'ReadableState'
+    |     property 'pipes' -> object with constructor 'Array'
+    |     index 0 -> object with constructor 'DailyRotateFile'
+    --- property 'parent' closes the circle
+2024-01-21T02:31:49.177Z [31merror[39m:	user is not defined
+2024-01-21T02:32:28.845Z [31merror[39m:	user is not defined
+2024-01-21T02:37:42.983Z [31merror[39m:	user is not defined

@@ -1,0 +1,17 @@
+2024-01-20T12:52:29.053Z [31merror[39m:	data is not defined
+2024-01-20T12:54:11.732Z [31merror[39m:	
+Invalid `prisma.job.create()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/job.js:7:34
+
+  4 exports.addJob = async (req, res, next) => {
+  5   try {
+  6     const data = req.body;
+→ 7     const job = await prisma.job.create({
+          data: {
+            industry: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+            tile: "IT Consultant",
+        +   title: String
+          }
+        })
+
+Argument `title` is missing.

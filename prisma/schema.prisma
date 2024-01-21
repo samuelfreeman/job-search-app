@@ -15,18 +15,60 @@ model admin {
   fullname  String
   email     String   @unique
   password  String
-  telephone String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model user {
+  id          String        @id @default(uuid())
+  fullname    String
+  email       String        @unique
+  password    String
+  resume      String?
+  appliedJobs application[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model cartegory {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  jobs        job[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model job {
+  id            String        @id @default(uuid())
+  title         String
+  description   String?
+  email         String?
+  address       String?
+  salaryRange   String?
+  noOfPositions String?
+  company       String?
+  experience    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  application   application[]
+  cartegory     cartegory?    @relation(fields: [industry], references: [id])
+  industry      String?
+}
+
+model application {
   id        String   @id @default(uuid())
-  fullname  String
-  email     String   @unique
-  password  String
-  telephone String?
-  resume    String?
+  status    status
+  job       job?     @relation(fields: [jobId], references: [id])
+  jobId     String?
+  user      user?    @relation(fields: [userId], references: [id])
+  userId    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum status {
+  Submitted
+  Accepted
+  Declined
 }

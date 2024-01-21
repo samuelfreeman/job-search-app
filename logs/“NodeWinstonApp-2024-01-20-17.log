@@ -1,0 +1,172 @@
+2024-01-20T17:00:07.650Z [31merror[39m:	
+Invalid `prisma.job.findMany()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:28:34
+
+  25     id,
+  26   },
+  27 });
+→ 28 const job = await prisma.job.findMany({
+       where: {
+         industry: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+         application: {
+           has: {
+           ~~~
+             status: {
+               not: null
+             }
+           },
+     ?     every?: applicationWhereInput,
+     ?     some?: applicationWhereInput,
+     ?     none?: applicationWhereInput
+         }
+       },
+       include: {
+         application: {
+           where: {
+             status: {
+               not: null
+             }
+           }
+         }
+       }
+     })
+
+Unknown argument `has`. Available options are marked with ?.
+2024-01-20T17:00:51.925Z [31merror[39m:	
+Invalid `prisma.job.findMany()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:28:34
+
+  25     id,
+  26   },
+  27 });
+→ 28 const job = await prisma.job.findMany({
+       where: {
+         application: {
+           has: {
+           ~~~
+             status: {
+               not: null
+             }
+           },
+     ?     every?: applicationWhereInput,
+     ?     some?: applicationWhereInput,
+     ?     none?: applicationWhereInput
+         }
+       },
+       include: {
+         application: {
+           where: {
+             status: {
+               not: null
+             }
+           }
+         }
+       }
+     })
+
+Unknown argument `has`. Available options are marked with ?.
+2024-01-20T17:01:52.464Z [31merror[39m:	
+Invalid `prisma.job.findMany()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:28:34
+
+  25     id,
+  26   },
+  27 });
+→ 28 const job = await prisma.job.findMany({
+       where: {
+         application: {
+           has: {
+           ~~~
+             status: {
+               not: null
+             }
+           },
+     ?     every?: applicationWhereInput,
+     ?     some?: applicationWhereInput,
+     ?     none?: applicationWhereInput
+         }
+       },
+       include: {
+         application: true
+       }
+     })
+
+Unknown argument `has`. Available options are marked with ?.
+2024-01-20T17:05:22.564Z [31merror[39m:	job is not defined
+2024-01-20T17:15:30.367Z [31merror[39m:	
+Invalid `prisma.cartegory.findFirst()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:23:46
+
+  20 exports.jobsAppliedbyCartegory = async (req, res, next) => {
+  21   try {
+  22     const { id } = req.params;
+→ 23     const cartegory = await prisma.cartegory.findFirst({
+           where: {
+             AND: [
+               {
+                 id: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+                 jobs: {
+                   some: {
+                     application: true
+                   }
+                 }
+               }
+             ]
+           }
+         })
+
+Argument `application`: Invalid value provided. Expected ApplicationListRelationFilter, provided Boolean.
+2024-01-20T17:18:05.182Z [31merror[39m:	
+Invalid `prisma.cartegory.findFirst()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:23:46
+
+  20 exports.jobsAppliedbyCartegory = async (req, res, next) => {
+  21   try {
+  22     const { id } = req.params;
+→ 23     const cartegory = await prisma.cartegory.findFirst({
+           where: {
+             AND: [
+               {
+                 id: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+                 jobs: {
+                   some: {
+                     application: {
+                       some: {
+                         status: true
+                       }
+                     }
+                   }
+                 }
+               }
+             ]
+           }
+         })
+
+Argument `status`: Invalid value provided. Expected StringNullableFilter, String or Null, provided Boolean.
+2024-01-20T17:18:19.982Z [31merror[39m:	
+Invalid `prisma.cartegory.findFirst()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/cartegory.js:23:46
+
+  20 exports.jobsAppliedbyCartegory = async (req, res, next) => {
+  21   try {
+  22     const { id } = req.params;
+→ 23     const cartegory = await prisma.cartegory.findFirst({
+           where: {
+             AND: [
+               {
+                 id: "b7dea6b6-f683-4de7-acd2-20c950c9942d",
+                 jobs: {
+                   some: {
+                     application: {
+                       some: {
+                         status: true
+                       }
+                     }
+                   }
+                 }
+               }
+             ]
+           }
+         })
+
+Argument `status`: Invalid value provided. Expected StringNullableFilter, String or Null, provided Boolean.

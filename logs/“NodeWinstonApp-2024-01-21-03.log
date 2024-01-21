@@ -1,0 +1,118 @@
+2024-01-21T03:36:12.320Z [31merror[39m:	
+Invalid `prisma.application.update()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/application.js:241:50
+
+  238 const { applicationIds, ...rest } = req.body;
+  239 
+  240 // Update the application by ID with new data
+→ 241 const application = await prisma.application.update({
+        where: {
+          id: "bulk"
+        },
+        data: {
+          ids: [
+          ~~~
+            "54808412-1bd4-48d4-b2e3-50d1cce40235",
+            "ddf14119-92c8-4a33-853d-8d7badf04d9c"
+          ],
+          status: "Accepted",
+      ?   id?: String | StringFieldUpdateOperationsInput,
+      ?   createdAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+      ?   updatedAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+      ?   job?: jobUpdateOneWithoutApplicationNestedInput,
+      ?   user?: userUpdateOneWithoutAppliedJobsNestedInput
+        }
+      })
+
+Unknown argument `ids`. Did you mean `id`? Available options are marked with ?.
+2024-01-21T03:36:12.320Z [31merror[39m:		
+Invalid `prisma.application.update()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/application.js:241:50
+
+  238 const { applicationIds, ...rest } = req.body;
+  239 
+  240 // Update the application by ID with new data
+→ 241 const application = await prisma.application.update({
+        where: {
+          id: "bulk"
+        },
+        data: {
+          ids: [
+          ~~~
+            "54808412-1bd4-48d4-b2e3-50d1cce40235",
+            "ddf14119-92c8-4a33-853d-8d7badf04d9c"
+          ],
+          status: "Accepted",
+      ?   id?: String | StringFieldUpdateOperationsInput,
+      ?   createdAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+      ?   updatedAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+      ?   job?: jobUpdateOneWithoutApplicationNestedInput,
+      ?   user?: userUpdateOneWithoutAppliedJobsNestedInput
+        }
+      })
+
+Unknown argument `ids`. Did you mean `id`? Available options are marked with ?.
+2024-01-21T03:37:11.585Z [31merror[39m:	Cannot read properties of undefined (reading 'map')
+2024-01-21T03:37:11.585Z [31merror[39m:		Cannot read properties of undefined (reading 'map')
+2024-01-21T03:40:25.267Z [31merror[39m:	Cannot read properties of undefined (reading 'map')
+2024-01-21T03:40:25.267Z [31merror[39m:		Cannot read properties of undefined (reading 'map')
+2024-01-21T03:40:44.837Z [31merror[39m:	Cannot read properties of undefined (reading 'map')
+2024-01-21T03:40:44.837Z [31merror[39m:		Cannot read properties of undefined (reading 'map')
+2024-01-21T03:41:03.101Z [31merror[39m:	Cannot read properties of undefined (reading 'map')
+2024-01-21T03:41:03.101Z [31merror[39m:		Cannot read properties of undefined (reading 'map')
+2024-01-21T03:43:03.146Z [31merror[39m:	
+Invalid `prisma.application.updateMany()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/application.js:60:58
+
+  57 try {
+  58   const { applicationIds, ...rest } = req.body;
+  59 
+→ 60   const updatedApplications = await prisma.application.updateMany({
+         where: {
+           id: {
+             in: undefined
+           }
+         },
+         data: {
+           ids: [
+           ~~~
+             "54808412-1bd4-48d4-b2e3-50d1cce40235",
+             "ddf14119-92c8-4a33-853d-8d7badf04d9c"
+           ],
+           status: "Accepted",
+       ?   id?: String | StringFieldUpdateOperationsInput,
+       ?   createdAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+       ?   updatedAt?: DateTime | DateTimeFieldUpdateOperationsInput
+         }
+       })
+
+Unknown argument `ids`. Did you mean `id`? Available options are marked with ?.
+2024-01-21T03:43:03.146Z [31merror[39m:		
+Invalid `prisma.application.updateMany()` invocation in
+/home/sam/Documents/Allprojects/job-search-app/src/controllers/application.js:60:58
+
+  57 try {
+  58   const { applicationIds, ...rest } = req.body;
+  59 
+→ 60   const updatedApplications = await prisma.application.updateMany({
+         where: {
+           id: {
+             in: undefined
+           }
+         },
+         data: {
+           ids: [
+           ~~~
+             "54808412-1bd4-48d4-b2e3-50d1cce40235",
+             "ddf14119-92c8-4a33-853d-8d7badf04d9c"
+           ],
+           status: "Accepted",
+       ?   id?: String | StringFieldUpdateOperationsInput,
+       ?   createdAt?: DateTime | DateTimeFieldUpdateOperationsInput,
+       ?   updatedAt?: DateTime | DateTimeFieldUpdateOperationsInput
+         }
+       })
+
+Unknown argument `ids`. Did you mean `id`? Available options are marked with ?.
+2024-01-21T03:52:09.108Z [31merror[39m:	jobs is not defined
+2024-01-21T03:52:09.108Z [31merror[39m:		jobs is not defined
