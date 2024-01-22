@@ -1,12 +1,37 @@
 const prisma = require('../utils/prisma');
 const logger = require('../utils/logger');
+// we want to make sure the user doesnt apply for the same job more than once
+const preventDoubleApplication = async (user, job) => {
+  if (job.length === 0) {
+    return (application = await prisma.application.findFirst({
+      where: { AND: [{ userId: user, jobId: job }] },
+    }));
+  } else {
+    return (application = await prisma.application.findMany({
+      where: {
+        AND: [
+          {
+            userId: user,
+            jobId: {
+              in: job,
+            },
+          },
+        ],
+      },
+    }));
+  }
+};
 
 // Controller to apply for a single job
 exports.applyJob = async (req, res, next) => {
   try {
     const data = req.body;
     data.status = 'Submitted';
-
+    // error handler to prevent double application
+    const check = await preventDoubleApplication(data.userId, data.jobId);
+    if (check) {
+      throw new Error('User has already applied for the same job!');
+    }
     // Create a new application for the job
     const application = await prisma.application.create({
       data,
@@ -30,7 +55,11 @@ exports.applyJob = async (req, res, next) => {
 exports.bulkApplication = async (req, res, next) => {
   try {
     const { userId, jobIds } = req.body;
-
+    // error handler to prevent double application
+    const check = await preventDoubleApplication(userId, jobIds);
+    if (check) {
+      throw new Error('User has already applied for the same job!');
+    }
     // Create multiple applications for the specified jobs
     const applications = jobIds.map((jobId) => ({
       userId,

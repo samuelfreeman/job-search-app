@@ -1,9 +1,0 @@
-2024-01-18T22:52:01.320Z [31merror[39m:	
-Invalid `prisma.user.delete()` invocation in
-/home/sam/Documents/Allprojects/job-search-app/src/controllers/user.js:146:42
-
-  143 exports.deleteUser = async (req, res) => {
-  144   try {
-  145     const { id } = req.params;
-→ 146     const user = await prisma.user.delete(
-An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.
