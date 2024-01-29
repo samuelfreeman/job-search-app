@@ -13,7 +13,7 @@ adminRoute.post('/signUp', validate, user.register);
 adminRoute.post('/login', user.login);
 adminRoute.patch('/:id', authenticate, user.updateAdmin);
 adminRoute.delete('/:id', authenticate, user.deleteAdmin);
-adminRoute.get('/', authenticate, user.getAllAdmins);
+adminRoute.get('/', authenticate, user.loadAdmins);
 adminRoute.get('/:id', authenticate, user.getAdmin);
 
 module.exports = adminRoute;

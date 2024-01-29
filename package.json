@@ -6,11 +6,12 @@
   "scripts": {
     "lint": "npx eslint --fix ./",
     "format": "npx prettier . --write",
-    "test": "jest",
+    "test": "jest .",
     "launch": "node --watch app.js",
     "generate": "npx prisma generate",
     "migrate:dev": "npx prisma migrate dev"
   },
+ 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/samuelfreeman/job-search-app.git"

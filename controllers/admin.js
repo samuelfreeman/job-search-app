@@ -3,7 +3,12 @@ const bcrypt = require('../utils/bcrypt');
 const logger = require('../utils/logger');
 const { checkAdminExists } = require('../verification/user');
 const jwt = require('../utils/token');
-
+const {
+  createAdmin,
+  getAdmin,
+  getAllAdmins,
+  updateAdmin,
+} = require('../helpers/adminHelper');
 // Register a new admin
 exports.register = async (req, res, next) => {
   const data = req.body;
@@ -21,7 +26,7 @@ exports.register = async (req, res, next) => {
   try {
     // Hash the user's password before storing it
     data.password = await bcrypt.hash(data.password);
-    const admin = await prisma.admin.create({ data });
+    const admin = await createAdmin(data);
 
     logger.info('User registered successfully!');
 
@@ -84,10 +89,7 @@ exports.login = async (req, res, next) => {
 exports.getAdmin = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const admin = await prisma.admin.findFirst({
-      where: { id },
-    });
-
+    const admin = await getAdmin(id);
     // Omit the password from the response
     if (admin) {
       delete admin.password;
@@ -106,10 +108,9 @@ exports.getAdmin = async (req, res, next) => {
 };
 
 // Get all admins
-exports.getAllAdmins = async (req, res, next) => {
+exports.loadAdmins = async (req, res, next) => {
   try {
-    const admins = await prisma.admin.findMany({});
-
+    const admins = await getAllAdmins();
     // Omit the password from each admin's response
     admins.forEach((admins) => delete admins.password);
 
@@ -141,10 +142,7 @@ exports.updateAdmin = async (req, res, next) => {
     }
 
     // Update the admin information
-    const updatedAdmin = await prisma.admin.update({
-      where: { id },
-      data,
-    });
+    const updatedAdmin = await updateAdmin(id, data);
 
     // Omit the password from the response
     delete updatedAdmin.password;
