@@ -3,6 +3,14 @@ const bcrypt = require('../utils/bcrypt');
 const logger = require('../utils/logger');
 const { checkUserExits } = require('../verification/user');
 const jwt = require('../utils/token');
+const {
+  createUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  getSingleUser,
+  applyJobs,
+} = require('../helpers/userHelper');
 
 // Controller to register a new user
 exports.register = async (req, res, next) => {
@@ -19,9 +27,7 @@ exports.register = async (req, res, next) => {
       data.password = await bcrypt.hash(data.password);
 
       // Create a new user
-      const user = await prisma.user.create({
-        data,
-      });
+      const user = await createUser(data);
 
       // Generate JWT token for the user
       const token = await jwt.userSignToken(user.id);
@@ -93,11 +99,7 @@ exports.getUser = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve a user by ID
-    const user = await prisma.user.findFirst({
-      where: {
-        id,
-      },
-    });
+    const user = await getSingleUser(id);
 
     // Remove password before sending the response
     delete user.password;
@@ -119,8 +121,7 @@ exports.getUser = async (req, res, next) => {
 exports.getAllUser = async (req, res, next) => {
   try {
     // Retrieve all users
-    const users = await prisma.user.findMany({});
-
+    const users = await getUsers();
     // Remove password before sending the response
     users.forEach((users) => delete users.password);
 
@@ -143,21 +144,7 @@ exports.getAppliedJobs = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve all applied jobs by a user
-    const applied = await prisma.user.findMany({
-      where: {
-        id,
-      },
-      include: {
-        appliedJobs: {
-          where: {
-            userId: id,
-          },
-          include: {
-            job: true,
-          },
-        },
-      },
-    });
+    const applied = await applyJobs(id);
 
     // Respond with the list of applied jobs
     res.status(200).json({
@@ -165,7 +152,6 @@ exports.getAppliedJobs = async (req, res, next) => {
     });
   } catch (error) {
     // Log and pass the error to the next middleware
-
     logger.error(error);
     next(error);
   }
@@ -179,11 +165,7 @@ exports.updateUser = async (req, res, next) => {
     data.password = await bcrypt.hash(data.password);
 
     // Find the user by ID
-    const user = await prisma.user.findFirst({
-      where: {
-        id,
-      },
-    });
+    const user = await getSingleUser(id);
 
     // Check if the user exists
     if (!user) {
@@ -192,12 +174,7 @@ exports.updateUser = async (req, res, next) => {
       });
     } else {
       // Update the user with new data
-      const updatedUser = await prisma.user.update({
-        where: {
-          id,
-        },
-        data,
-      });
+      const updatedUser = await updateUser(id, data);
 
       // Remove password before sending the response
       delete updatedUser.password;
@@ -222,19 +199,7 @@ exports.getAllApplicationsByStatus = async (req, res, next) => {
     const { id, status } = req.params;
 
     // Retrieve all accepted applications by a user
-    const applications = await prisma.application.findMany({
-      where: {
-        AND: [
-          {
-            userId: id,
-            status,
-          },
-        ],
-      },
-      include: {
-        job: true,
-      },
-    });
+    const applications = await getAppliedJobs(id, status);
 
     // Respond with the list of accepted applications
     res.status(200).json({
@@ -254,11 +219,7 @@ exports.deleteUser = async (req, res, next) => {
     const { id } = req.params;
 
     // Find the user by ID
-    const user = await prisma.user.findFirst({
-      where: {
-        id,
-      },
-    });
+    const user = await getSingleUser(id);
 
     // Check if the user exists
     if (!user) {
@@ -267,11 +228,7 @@ exports.deleteUser = async (req, res, next) => {
       });
     } else {
       // Delete the user by ID
-      const deletedUser = await prisma.user.delete({
-        where: {
-          id,
-        },
-      });
+      const deletedUser = await deleteUser(id);
 
       // Remove password before sending the response
       delete deletedUser.password;
