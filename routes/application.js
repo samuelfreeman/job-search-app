@@ -3,7 +3,7 @@ const application = require('../controllers/application');
 
 const applicationRoute = Router();
 
-applicationRoute.post('/', application.applyJob);
+// applicationRoute.post('/', application.applyJob);//deactivated this because the bulk can be used to apply for a single job as well
 applicationRoute.post('/bulk', application.bulkApplication);
 applicationRoute.get('/all-applications', application.getAllApplications);
 applicationRoute.get(
