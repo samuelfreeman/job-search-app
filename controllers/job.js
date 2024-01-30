@@ -1,5 +1,13 @@
-const prisma = require('../utils/prisma');
 const logger = require('../utils/logger');
+
+const {
+  createJob,
+  getJobs,
+  queryJobs,
+  get_single_job,
+  removeJob,
+  editJob,
+} = require('../helpers/jobHelper');
 
 // Controller to add a new job
 exports.addJob = async (req, res, next) => {
@@ -7,9 +15,7 @@ exports.addJob = async (req, res, next) => {
     const data = req.body;
 
     // Create a new job
-    const job = await prisma.job.create({
-      data,
-    });
+    const job = await createJob(data);
 
     // Respond with success message and job information
     res.status(200).json({
@@ -29,7 +35,7 @@ exports.addJob = async (req, res, next) => {
 exports.getAllJobs = async (req, res, next) => {
   try {
     // Retrieve all jobs
-    const jobs = await prisma.job.findMany({});
+    const jobs = await getJobs();
 
     // Respond with the list of jobs
     res.status(200).json({
@@ -49,17 +55,7 @@ exports.getJobs = async (req, res) => {
     const { query } = req.query;
 
     // Search for jobs by title or category with an optional query
-    const jobs = await prisma.job.findMany({
-      where: {
-        OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { cartegory: { name: { contains: query, mode: 'insensitive' } } },
-        ],
-      },
-      include: {
-        cartegory: true,
-      },
-    });
+    const jobs = await queryJobs(query);
 
     // Respond with the list of jobs matching the query
     res.status(200).json({ jobs });
@@ -77,18 +73,7 @@ exports.getSingleJob = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve a single job by ID along with associated applications and users
-    const job = await prisma.job.findFirst({
-      where: {
-        id,
-      },
-      include: {
-        application: {
-          include: {
-            user: true,
-          },
-        },
-      },
-    });
+    const job = await get_single_job(id);
 
     // Respond with the job information
     res.status(200).json({
@@ -108,11 +93,7 @@ exports.deleteJob = async (req, res, next) => {
     const { id } = req.params;
 
     // Delete the job by ID
-    const job = await prisma.job.delete({
-      where: {
-        id,
-      },
-    });
+    const job = await removeJob(id);
 
     // Respond with success message and deleted job information
     res.status(200).json({
@@ -135,12 +116,7 @@ exports.updateJob = async (req, res, next) => {
     const data = req.body;
 
     // Update the job by ID with new data
-    const job = await prisma.job.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    const job = await editJob(id,data)
 
     // Respond with success message and updated job information
     res.status(200).json({

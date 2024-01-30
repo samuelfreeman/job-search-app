@@ -1,42 +1,29 @@
-const prisma = require('../utils/prisma');
 const logger = require('../utils/logger');
-// we want to make sure the user doesnt apply for the same job more than once
-const preventDoubleApplication = async (user, job) => {
-  if (job.length === 0) {
-    return (application = await prisma.application.findFirst({
-      where: { AND: [{ userId: user, jobId: job }] },
-    }));
-  } else {
-    return (application = await prisma.application.findMany({
-      where: {
-        AND: [
-          {
-            userId: user,
-            jobId: {
-              in: job,
-            },
-          },
-        ],
-      },
-    }));
-  }
-};
+const {
+  createApplications,
+  updateApplication,
+  updateManyAppications,
+  findApplications,
+  find_application_status,
+  deleteApplication,
+  createSingleApplication,
+  find_single_Application,
+  preventDoubleApplication,
+} = require('../helpers/applicationHelper');
 
 // Controller to apply for a single job
 exports.applyJob = async (req, res, next) => {
   try {
     const data = req.body;
     data.status = 'Submitted';
-    // error handler to prevent double application
+    /*error handler to prevent double application
+     we want to make sure the user doesnt apply for the same job more than once*/
     const check = await preventDoubleApplication(data.userId, data.jobId);
     if (check) {
       throw new Error('User has already applied for the same job!');
     }
     // Create a new application for the job
-    const application = await prisma.application.create({
-      data,
-    });
-
+    const application = await createSingleApplication(data);
     // Respond with success message and application information
     res.status(200).json({
       status: 'Successful',
@@ -66,10 +53,7 @@ exports.bulkApplication = async (req, res, next) => {
       status: 'Submitted',
       jobId,
     }));
-    const appliedJobs = await prisma.application.createMany({
-      data: applications,
-    });
-
+    const appliedJobs = await createApplications(applications);
     // Respond with success message and applied jobs information
     res.status(200).json({
       message: 'Applications submitted successfully',
@@ -86,14 +70,7 @@ exports.updateMultipleApplications = async (req, res, next) => {
   try {
     const { applicationIds, ...rest } = req.body;
 
-    const updatedApplications = await prisma.application.updateMany({
-      where: {
-        id: {
-          in: applicationIds,
-        },
-      },
-      data: rest,
-    });
+    const updatedApplications = updateManyAppications(applicationIds, rest);
 
     // Respond with success message and updated applications information
     res.status(200).json({
@@ -113,7 +90,7 @@ exports.updateMultipleApplications = async (req, res, next) => {
 exports.getAllApplications = async (req, res, next) => {
   try {
     // Retrieve all applications
-    const applications = await prisma.application.findMany({});
+    const applications = await findApplications();
 
     // Respond with the list of applications
     res.status(200).json({
@@ -132,14 +109,7 @@ exports.applicationStatus = async (req, res, next) => {
   const { status } = req.params;
   try {
     // Retrieve applications with status  and include user information
-    const application = await prisma.application.findMany({
-      where: {
-        status,
-      },
-      include: {
-        user: true,
-      },
-    });
+    const application = await find_application_status(status);
 
     // Respond with the list of declined applications
     res.status(200).json({
@@ -159,11 +129,7 @@ exports.getSingleApplication = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve a single application by ID
-    const application = await prisma.application.findFirst({
-      where: {
-        id,
-      },
-    });
+    const application = await find_single_Application(id);
 
     // Respond with the application information
     res.status(200).json({
@@ -183,11 +149,7 @@ exports.deleteApplication = async (req, res, next) => {
     const { id } = req.params;
 
     // Delete the application by ID
-    const application = await prisma.application.delete({
-      where: {
-        id,
-      },
-    });
+    const application = await deleteApplication(id);
 
     // Respond with success message and deleted application information
     res.status(200).json({
@@ -210,12 +172,7 @@ exports.acceptApplication = async (req, res, next) => {
     const data = req.body;
 
     // Update the application by ID with new data
-    const application = await prisma.application.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    const application = await updateApplication(id, data);
 
     // Respond with success message and updated application information
     res.status(200).json({
@@ -237,12 +194,7 @@ exports.declineApplication = async (req, res, next) => {
     const data = req.body;
 
     // Update the application by ID with new data
-    const application = await prisma.application.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    const application = await updateApplication(id, data);
 
     // Respond with success message and updated application information
     res.status(200).json({
@@ -257,19 +209,13 @@ exports.declineApplication = async (req, res, next) => {
   }
 };
 
-// Controller to update an application by ID
+/*Controller to update multiple  applications  by thier ids
 exports.updateApplication = async (req, res, next) => {
   try {
-    const { id } = req.params;
     const { applicationIds, ...rest } = req.body;
 
     // Update the application by ID with new data
-    const application = await prisma.application.update({
-      where: {
-        id,
-      },
-      data: rest,
-    });
+    const application = await
 
     // Respond with success message and updated application information
     res.status(200).json({
@@ -283,4 +229,4 @@ exports.updateApplication = async (req, res, next) => {
 
     next(error);
   }
-};
+}; */

@@ -12,6 +12,6 @@ applicationRoute.get(
 );
 applicationRoute.get('/:id', application.getSingleApplication);
 applicationRoute.delete('/:id', application.deleteApplication);
-applicationRoute.patch('/:id', application.updateApplication);
+
 applicationRoute.patch('/bulk/apply', application.updateMultipleApplications);
 module.exports = applicationRoute;

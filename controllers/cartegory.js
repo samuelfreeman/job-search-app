@@ -1,5 +1,13 @@
-const prisma = require('../utils/prisma');
 const logger = require('../utils/logger');
+
+const {
+  createCartegories,
+  findCartegories,
+  queryCartegories,
+  singleCartegory,
+  delCartegory,
+  editCartegory,
+} = require('../helpers/cartegoryHelper');
 
 // Controller to add a new category
 exports.addCartegory = async (req, res, next) => {
@@ -7,9 +15,7 @@ exports.addCartegory = async (req, res, next) => {
     const { jobs } = req.body;
 
     // Create multiple categories
-    const cartegory = await prisma.cartegory.createMany({
-      data: jobs,
-    });
+    const cartegory = await createCartegories(jobs);
 
     // Respond with success message and category information
     res.status(200).json({
@@ -31,22 +37,7 @@ exports.jobsAppliedbyCartegory = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve jobs in a specific category with applied applications
-    const jobs = await prisma.job.findMany({
-      where: {
-        industry: id,
-        application: {
-          some: {
-            status: {
-              not: null,
-            },
-          },
-        },
-      },
-      include: {
-        cartegory: true,
-        application: true,
-      },
-    });
+    const jobs = await findCartegories(id);
 
     // Respond with the list of jobs in the category with applied applications
     res.status(200).json({
@@ -66,14 +57,7 @@ exports.getAllCartegories = async (req, res, next) => {
     const { query } = req.query;
 
     // Retrieve categories with an optional search query
-    const cartegories = await prisma.cartegory.findMany({
-      where: {
-        name: { contains: query, mode: 'insensitive' },
-      },
-      include: {
-        jobs: true,
-      },
-    });
+    const cartegories = await queryCartegories(query);
 
     // Respond with the list of categories
     res.status(200).json({
@@ -93,14 +77,7 @@ exports.getSingleCartegory = async (req, res, next) => {
     const { id } = req.params;
 
     // Retrieve a single category by ID
-    const cartegory = await prisma.cartegory.findFirst({
-      where: {
-        id,
-      },
-      include: {
-        jobs: true,
-      },
-    });
+    const cartegory = await singleCartegory(id);
 
     // Respond with the category information
     res.status(200).json({
@@ -120,11 +97,7 @@ exports.deleteCartegory = async (req, res, next) => {
     const { id } = req.params;
 
     // Delete the category by ID
-    const cartegory = await prisma.cartegory.delete({
-      where: {
-        id,
-      },
-    });
+    const cartegory = await delCartegory(id);
 
     // Respond with success message and deleted category information
     res.status(200).json({
@@ -147,12 +120,7 @@ exports.updateCartegory = async (req, res, next) => {
     const data = req.body;
 
     // Update the category by ID with new data
-    const cartegory = await prisma.cartegory.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    const cartegory = await editCartegory(id, data);
 
     // Respond with success message and updated category information
     res.status(200).json({

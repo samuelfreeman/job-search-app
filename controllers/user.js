@@ -1,4 +1,3 @@
-const prisma = require('../utils/prisma');
 const bcrypt = require('../utils/bcrypt');
 const logger = require('../utils/logger');
 const { checkUserExits } = require('../verification/user');
@@ -175,7 +174,7 @@ exports.updateUser = async (req, res, next) => {
     } else {
       // Update the user with new data
       const updatedUser = await updateUser(id, data);
-
+      
       // Remove password before sending the response
       delete updatedUser.password;
 
