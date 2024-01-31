@@ -36,11 +36,13 @@ const updateManyAppications = async (applicationIds, data) => {
   return application;
 };
 const find_single_Application = async (id) => {
+  console.log(id);
   const application = await prisma.user.findFirst({
     where: {
       id,
     },
   });
+  console.log(application);
   return application;
 };
 const findApplications = async () => {

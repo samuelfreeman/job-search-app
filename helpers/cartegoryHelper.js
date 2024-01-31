@@ -8,6 +8,7 @@ const createCartegories = async (jobs) => {
 };
 
 
+
 const findCartegories = async (id) => {
   const cartegories = await prisma.job.findMany({
     where: {
