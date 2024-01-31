@@ -10,16 +10,17 @@ const getUsers = async () => {
   return user;
 };
 
-const updateUser = async (id) => {
+const updateUser = async (id, data) => {
   const user = await prisma.user.update({
     where: {
       id,
     },
+    data,
   });
   return user;
 };
 
-const getSingleUser = async () => {
+const getSingleUser = async (id) => {
   const user = await prisma.user.findUnique({
     where: {
       id,

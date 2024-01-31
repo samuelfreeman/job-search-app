@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../utils/prisma');
+
 const {
   createAdmin,
   getAdmin,
@@ -15,7 +15,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await prisma.$disconnect();
 });
-
 describe('Admin  operations', () => {
   // create a new admin into the database
   it('should create a admin', async () => {
@@ -46,6 +45,7 @@ describe('Admin  operations', () => {
       fullname: 'testName updated',
       password: 'passTest123@',
     };
+
     const admin = await updateAdmin(id, data);
 
     expect(admin).not.toBeNull();
