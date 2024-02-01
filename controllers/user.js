@@ -80,6 +80,7 @@ exports.login = async (req, res, next) => {
         // Respond with success message and access token
         res.status(200).json({
           message: 'User successfully logged in!',
+          admin,
           AccessToken: token,
         });
       }
@@ -174,7 +175,7 @@ exports.updateUser = async (req, res, next) => {
     } else {
       // Update the user with new data
       const updatedUser = await updateUser(id, data);
-      
+
       // Remove password before sending the response
       delete updatedUser.password;
 

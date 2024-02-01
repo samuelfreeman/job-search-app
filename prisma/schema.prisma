@@ -38,7 +38,7 @@ model cartegory {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
+/// filter based on full time or part time 
 model job {
   id            String        @id @default(uuid())
   title         String
