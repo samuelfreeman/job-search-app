@@ -38,10 +38,12 @@ model cartegory {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 /// filter based on full time or part time 
 model job {
   id            String        @id @default(uuid())
   title         String
+  jobType       type          @default(fullTime)
   description   String?
   email         String?
   address       String?
@@ -71,4 +73,9 @@ enum status {
   Submitted
   Accepted
   Declined
+}
+
+enum type {
+  fullTime
+  partTime
 }
