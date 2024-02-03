@@ -1,7 +1,6 @@
 const prisma = require('../utils/prisma');
 const {
   createCartegories,
-  findCartegories,
   queryCartegories,
   singleCartegory,
   delCartegory,
@@ -27,20 +26,28 @@ afterAll(async () => {
 });
 
 describe('application operations ', () => {
+  //  add a cartegory
   it('should add a cartegories ', async () => {
     const cartegories = await createCartegories(data);
     expect(cartegories).not.toBeNull();
   });
-
+  // edit a cartegory
   it('should edit the cartegories', async () => {
     const cartegories = await editCartegory(data.id, editData);
     expect(cartegories).not.toBeNull();
   });
-/*  it('should find a single cartegory', async () => {
+  //  find a single cartegory
+  it('should find a single cartegory', async () => {
     const cartegories = await singleCartegory(data.id);
-    expect(cartegories).not.toBeNull()
+    expect(cartegories).not.toBeNull();
   });
-*/
+ 
+  //  query cartegories
+  it('should query cartegories', async () => {
+    const cartegories = await queryCartegories(data.name);
+    expect(cartegories).not.toBeNull();
+  });
+  //  remove the  cartegories
   it('should remove cartegories', async () => {
     const cartegories = await delCartegory(data.id);
     expect(cartegories).not.toBeNull();

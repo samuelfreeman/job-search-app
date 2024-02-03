@@ -8,7 +8,6 @@ const {
   deleteApplication,
   createSingleApplication,
   find_single_Application,
-  preventDoubleApplication,
 } = require('../helpers/applicationHelper');
 
 beforeAll(async () => {
@@ -18,23 +17,80 @@ const data = {
   id: '216376@#$@#jsdfsk',
   status: 'Accepted',
 };
+const arrayData = [
+  {
+    id: 'sdlkf2347234##$%',
+    status: 'Submitted',
+  },
+  {
+    id: 'sdlkf2932234##$%',
+    status: 'Accepted',
+  },
+  {
+    id: 'sdl23972s9df32234##$%',
+    status: 'Declined',
+  },
+];
+const applicationIds = [
+  'sdlkf2347234##$%',
+  'sdlkf2932234##$%',
+  'sdl23972s9df32234##$%',
+];
 afterAll(async () => {
   await prisma.$disconnect();
 });
-
+//  create  a sample application
 describe('application operations ', () => {
   it('should  create an application ', async () => {
-    const application = await createApplications(data);
+    const application = await createApplications(arrayData);
     expect(application).not.toBeNull();
   });
-//    work on this test its not working
-/*  it('should get a single  application ', async () => {
-    const application = await find_single_Application(data.id);
-    
+  //  get all applications
+  it('should find all applications', async () => {
+    const applications = await findApplications();
+    expect(applications).not.toBeNull();
+  });
+  //  get a single application
+  it('should get a single  application ', async () => {
+    const application = await find_single_Application(arrayData[0].id);
+    expect(application).not.toBeNull();
+  });
+  //  update an application
+  it('should update an application', async () => {
+    // reject application
+    data.status = 'Declined';
+    const application = await updateApplication(arrayData[0].id, {
+      status: 'Declined',
+    });
+    expect(application.status).toBe('Declined');
+  });
+  //  remove the array  applications
+  it('should remove an application', async () => {
+    const application = await Promise.all(
+      arrayData.map((item) => deleteApplication(item.id)),
+    );
+    expect(application).not.toBeNull();
+  });
+  // create a single application
+  it('should create an application', async () => {
+    const application = await createSingleApplication(data);
     
     expect(application).not.toBeNull();
-  });*/
-  it('should remove an application', async () => {
+  });
+  // update many applications
+  it('should update all applications based on a status ', async () => {
+    const application = await updateManyAppications(applicationIds, {
+      status: data.status,
+    });
+    expect(application).not.toBeNull();
+  });
+  // find application by status
+  it('should find application by status', async () => {
+    const application = await find_application_status(data.status);
+    expect(application).not.toBeNull();
+  });
+  //  delete an application
+  it('should delete the single application in the data object', async () => {
     const application = await deleteApplication(data.id);
     expect(application).not.toBeNull();
   });

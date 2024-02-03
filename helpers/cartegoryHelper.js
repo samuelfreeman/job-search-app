@@ -7,8 +7,6 @@ const createCartegories = async (jobs) => {
   return cartegories;
 };
 
-
-
 const findCartegories = async (id) => {
   const cartegories = await prisma.job.findMany({
     where: {
@@ -47,7 +45,7 @@ const singleCartegory = async (id) => {
       id,
     },
     include: {
-      jobs,
+      jobs: true,
     },
   });
   return cartegory;
@@ -69,7 +67,6 @@ const editCartegory = async (id, data) => {
   });
   return cartegory;
 };
-
 
 module.exports = {
   createCartegories,
