@@ -6,6 +6,17 @@ const createJob = async (data) => {
   });
   return job;
 };
+
+const checkDoubleJobCreation = async (name) => {
+  const getJob = await prisma.job.findFirst({
+    where: {
+      title: {
+        contains: `${name}`,
+      },
+    },
+  });
+  return getJob;
+};
 // helper function for getting all jobs
 const getJobs = async () => {
   const jobs = await prisma.job.findMany({});
@@ -69,4 +80,5 @@ module.exports = {
   get_single_job,
   removeJob,
   editJob,
+  checkDoubleJobCreation
 };

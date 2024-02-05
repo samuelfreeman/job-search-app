@@ -1,5 +1,4 @@
 const logger = require('../utils/logger');
-
 const {
   createCartegories,
   findCartegories,
@@ -7,13 +6,13 @@ const {
   singleCartegory,
   delCartegory,
   editCartegory,
+  createSingleCategory,
 } = require('../helpers/cartegoryHelper');
 
 // Controller to add a new category
-exports.addCartegory = async (req, res, next) => {
+exports.addCartegories = async (req, res, next) => {
   try {
     const { jobs } = req.body;
-
     // Create multiple categories
     const cartegory = await createCartegories(jobs);
 
@@ -30,7 +29,28 @@ exports.addCartegory = async (req, res, next) => {
     next(error);
   }
 };
-
+exports.addCartegory = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const checkCartegory = await queryCartegories(data.name);
+    if (checkCartegory.length > 0) {
+      logger.error('cartegory has already been created!');
+      res.status(400).json({
+        message: 'cartegory has already been created',
+      });
+    } else {
+      const cartegory = await createSingleCategory(data);
+      res.status(201).json({
+        status: 'success',
+        message: 'Cartegory  successfully created!',
+        cartegory,
+      });
+    }
+  } catch (error) {
+    logger.error(error);
+    next(error);
+  }
+};
 // Controller to get jobs applied by category
 exports.jobsAppliedbyCartegory = async (req, res, next) => {
   try {

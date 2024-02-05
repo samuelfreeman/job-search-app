@@ -1,7 +1,7 @@
 const prisma = require('../utils/prisma');
 const bcrypt = require('../utils/bcrypt');
 const logger = require('../utils/logger');
-const { checkAdminExists } = require('../verification/user');
+const { checkAdminExists, checkExits } = require('../verification/user');
 const jwt = require('../utils/token');
 const {
   createAdmin,
@@ -51,35 +51,40 @@ exports.login = async (req, res, next) => {
     const data = req.body;
 
     // Check if the user with the provided email exists
-    const admin = await checkAdminExists(data.email);
+    const exists = await checkExits(data.email);
 
-    if (!admin) {
+    console.log(exists)
+    if (!exists || exists == null) {
       logger.error('User account not found!');
       return res.status(404).json({
         message: 'User not found!',
       });
-    }
+    } else {
+      // Compare the provided password with the stored hashed password
+      const checkPass = await bcrypt.compare(
+        data.password,
+        exists.user.password,
+      );
 
-    // Compare the provided password with the stored hashed password
-    const checkPass = await bcrypt.compare(data.password, admin.password);
+      if (!checkPass) {
+        logger.error('User Password or Email incorrect!');
+        return res.status(422).json({
+          message: 'Invalid credentials!',
+        });
+      }
 
-    if (!checkPass) {
-      logger.error('User Password or Email incorrect!');
-      return res.status(422).json({
-        message: 'Invalid credentials!',
+      // Generate and send an access token upon successful login
+      const token = await jwt.signToken(exists.user.id);
+
+      logger.info('User logged in successfully!');
+
+      res.status(200).json({
+        message: 'User successfully logged in!',
+        user: exists.user,
+        role: exists.role,
+        accessToken: token,
       });
     }
-
-    // Generate and send an access token upon successful login
-    const token = await jwt.signToken(admin.id);
-
-    logger.info('User logged in successfully!');
-
-    res.status(200).json({
-      message: 'User successfully logged in!',
-      admin,
-      accessToken: token,
-    });
   } catch (error) {
     logger.error(error);
     next(error);

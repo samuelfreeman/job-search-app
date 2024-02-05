@@ -7,6 +7,13 @@ const createCartegories = async (jobs) => {
   return cartegories;
 };
 
+const createSingleCategory = async (data) => {
+  const cartegorie = await prisma.cartegory.create({
+    data,
+  });
+  return cartegorie;
+};
+
 const findCartegories = async (id) => {
   const cartegories = await prisma.job.findMany({
     where: {
@@ -36,6 +43,7 @@ const queryCartegories = async (query) => {
       jobs: true,
     },
   });
+
   return cartegories;
 };
 
@@ -75,4 +83,5 @@ module.exports = {
   singleCartegory,
   delCartegory,
   editCartegory,
+  createSingleCategory,
 };

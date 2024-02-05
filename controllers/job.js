@@ -7,22 +7,30 @@ const {
   get_single_job,
   removeJob,
   editJob,
+  checkDoubleJobCreation,
 } = require('../helpers/jobHelper');
 
 // Controller to add a new job
 exports.addJob = async (req, res, next) => {
   try {
     const data = req.body;
-
-    // Create a new job
-    const job = await createJob(data);
-
-    // Respond with success message and job information
-    res.status(200).json({
-      status: 'Successful',
-      message: 'Job Created',
-      job,
-    });
+    // prevent double job creation
+    const checkJob = await checkDoubleJobCreation(data.title);
+    if (checkJob) {
+      return res.status(400).json({
+        statu:"Unsuccesful",
+        message:"Job is already available!"
+      })
+    } else {
+      // Create a new job
+      const job = await createJob(data);
+      // Respond with success message and job information
+      res.status(200).json({
+        status: 'Successful',
+        message: 'Job Created',
+        job,
+      });
+    }
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
@@ -116,7 +124,7 @@ exports.updateJob = async (req, res, next) => {
     const data = req.body;
 
     // Update the job by ID with new data
-    const job = await editJob(id,data)
+    const job = await editJob(id, data);
 
     // Respond with success message and updated job information
     res.status(200).json({
