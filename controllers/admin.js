@@ -21,11 +21,9 @@ exports.register = async (req, res, next) => {
     return res.status(400).json({
       message: 'User account already exists!',
     });
-  }
+      }
 
   try {
-    // Hash the user's password before storing it
-    data.password = await bcrypt.hash(data.password);
     const admin = await createAdmin(data);
 
     logger.info('User registered successfully!');
@@ -53,7 +51,7 @@ exports.login = async (req, res, next) => {
     // Check if the user with the provided email exists
     const exists = await checkExits(data.email);
 
-    console.log(exists)
+    console.log(exists);
     if (!exists || exists == null) {
       logger.error('User account not found!');
       return res.status(404).json({
@@ -135,9 +133,6 @@ exports.updateAdmin = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
-
-    // Hash the new password before updating
-    data.password = await bcrypt.hash(data.password);
 
     const existingAdmin = await prisma.admin.findFirst({ where: { id } });
 

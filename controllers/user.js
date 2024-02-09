@@ -18,13 +18,11 @@ exports.register = async (req, res, next) => {
 
   if (checkUserExit) {
     logger.error('User has already registered!');
-    res.status(400).json({
+res.status(400).json({
       message: 'User account Already Exists!',
     });
   } else {
     try {
-      data.password = await bcrypt.hash(data.password);
-
       // Create a new user
       const user = await createUser(data);
 
@@ -162,7 +160,6 @@ exports.updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    data.password = await bcrypt.hash(data.password);
 
     // Find the user by ID
     const user = await getSingleUser(id);
