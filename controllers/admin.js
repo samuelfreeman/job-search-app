@@ -1,5 +1,6 @@
 const prisma = require('../utils/prisma');
 const bcrypt = require('../utils/bcrypt');
+const redis = require('../utils/redis');
 const logger = require('../utils/logger');
 const { checkAdminExists, checkExits } = require('../verification/user');
 const jwt = require('../utils/token');

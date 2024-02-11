@@ -18,7 +18,7 @@ exports.register = async (req, res, next) => {
 
   if (checkUserExit) {
     logger.error('User has already registered!');
-res.status(400).json({
+    res.status(400).json({
       message: 'User account Already Exists!',
     });
   } else {
@@ -54,6 +54,7 @@ exports.login = async (req, res, next) => {
 
     // Check if the user exists
     const user = await checkUserExits(data.email);
+    console.log(req.session.user);
 
     if (!user) {
       logger.error('User account not found!');
