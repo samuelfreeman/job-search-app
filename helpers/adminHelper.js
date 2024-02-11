@@ -14,7 +14,11 @@ const getAdmin = async (id) => {
 };
 
 const getAllAdmins = async () => {
-  const admin = await prisma.admin.findMany({});
+  const admin = await prisma.admin.findMany({
+    orderBy: {
+      createdAt: desc,
+    },
+  });
   return admin;
 };
 const updateAdmin = async (id, data) => {

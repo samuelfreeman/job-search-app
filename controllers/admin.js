@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
     const exists = await checkExits(data.email);
 
     console.log(exists);
-    if (!exists || exists == null) {
+    if (!exists.user || exists.user == null) {
       logger.error('User account not found!');
       return res.status(404).json({
         message: 'User not found!',
