@@ -10,6 +10,7 @@ const verify = require('../utils/token');
 
 const authenticate = [verify.verifyUserToken];
 userRoute.post('/signUp', validate, user.register);
+userRoute.post('/login', user.login);
 userRoute.patch('/:id', authenticate, user.updateUser);
 userRoute.delete('/:id', authenticate, user.deleteUser);
 userRoute.get('/:id', authenticate, user.getUser);

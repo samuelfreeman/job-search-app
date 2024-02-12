@@ -41,15 +41,26 @@ const find_single_Application = async (id) => {
       id,
     },
   });
-  
+
   return application;
 };
 const findApplications = async () => {
-  const application = await prisma.application.findMany({});
+  const application = await prisma.application.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+  });
   return application;
 };
 const find_application_status = async (status) => {
   const application = await prisma.application.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       status,
     },
@@ -75,6 +86,11 @@ const preventDoubleApplication = async (user, job) => {
     }));
   } else {
     return (application = await prisma.application.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
       where: {
         AND: [
           {

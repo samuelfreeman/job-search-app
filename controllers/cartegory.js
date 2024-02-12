@@ -58,6 +58,7 @@ exports.jobsAppliedbyCartegory = async (req, res, next) => {
 
     // Retrieve jobs in a specific category with applied applications
     const jobs = await findCartegories(id);
+    console.log(jobs);
 
     // Respond with the list of jobs in the category with applied applications
     res.status(200).json({
@@ -66,7 +67,7 @@ exports.jobsAppliedbyCartegory = async (req, res, next) => {
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
-
+    console.log(error);
     next(error);
   }
 };

@@ -16,15 +16,13 @@ const createSingleCategory = async (data) => {
 
 const findCartegories = async (id) => {
   const cartegories = await prisma.job.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       industry: id,
-      application: {
-        some: {
-          status: {
-            not: null,
-          },
-        },
-      },
     },
     include: {
       cartegory: true,
@@ -36,6 +34,11 @@ const findCartegories = async (id) => {
 
 const queryCartegories = async (query) => {
   const cartegories = await prisma.cartegory.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       name: { contains: query, mode: 'insensitive' },
     },

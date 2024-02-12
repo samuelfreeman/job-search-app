@@ -6,7 +6,13 @@ const createUser = async (data) => {
 };
 
 const getUsers = async () => {
-  const user = await prisma.user.findMany({});
+  const user = await prisma.user.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+  });
   return user;
 };
 
@@ -39,6 +45,11 @@ const deleteUser = async (id) => {
 
 const applyJobs = async (id) => {
   const user = await prisma.user.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       id,
     },
@@ -57,6 +68,11 @@ const applyJobs = async (id) => {
 };
 const getAppliedJobs = async (userId, status) => {
   const user = await prisma.application.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       AND: [
         {

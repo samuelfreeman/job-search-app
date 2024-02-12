@@ -10,19 +10,7 @@ const checkExits = async (email) => {
         email,
       },
     });
-    console.log(user);
-
-    if (user) {
-      return { user, role: 'User' };
-    } else {
-      const admin = await prisma.admin.findUnique({
-        where: {
-          email,
-        },
-      });
-      console.log(admin);
-      return { user: admin, role: 'Admin' };
-    }
+    return user;
   } catch (error) {
     return logger.error(error);
   }

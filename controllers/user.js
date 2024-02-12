@@ -2,6 +2,7 @@ const bcrypt = require('../utils/bcrypt');
 const logger = require('../utils/logger');
 const { checkUserExits } = require('../verification/user');
 const jwt = require('../utils/token');
+const { checkExits } = require('../verification/user');
 const {
   createUser,
   getUsers,
@@ -48,45 +49,45 @@ exports.register = async (req, res, next) => {
 };
 
 // Controller to log in a user
+
 exports.login = async (req, res, next) => {
   try {
     const data = req.body;
 
-    // Check if the user exists
-    const user = await checkUserExits(data.email);
-    console.log(req.session.user);
+    // Check if the user with the provided email exists
+    const exists = await checkExits(data.email);
 
-    if (!user) {
+    console.log(exists);
+    if (!exists || exists == null) {
       logger.error('User account not found!');
-      res.status(404).json({
+      return res.status(404).json({
         message: 'User not found!',
       });
     } else {
-      // Check if the password is correct
-      const checkPass = await bcrypt.compare(data.password, user.password);
-
+      // Compare the provided password with the stored hashed password
+      const checkPass = await bcrypt.compare(
+        data.password,
+        exists.password,
+      );
       if (!checkPass) {
         logger.error('User Password or Email incorrect!');
-        res.status(422).json({
+        return res.status(422).json({
           message: 'Invalid credentials!',
         });
-      } else {
-        // Generate JWT token for the logged-in user
-        const token = await jwt.userSignToken(user.id);
-
-        logger.info('User logged in successfully!');
-
-        // Respond with success message and access token
-        res.status(200).json({
-          message: 'User successfully logged in!',
-          admin,
-          AccessToken: token,
-        });
       }
+
+      // Generate and send an access token upon successful login
+      const token = await jwt.userSignToken(exists.id);
+
+      logger.info('User logged in successfully!');
+
+      res.status(200).json({
+        message: 'User successfully logged in!',
+        user: exists,
+        accessToken: token,
+      });
     }
   } catch (error) {
-    // Log and pass the error to the next middleware
-
     logger.error(error);
     next(error);
   }

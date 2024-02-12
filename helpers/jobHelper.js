@@ -19,12 +19,23 @@ const checkDoubleJobCreation = async (name) => {
 };
 // helper function for getting all jobs
 const getJobs = async () => {
-  const jobs = await prisma.job.findMany({});
+  const jobs = await prisma.job.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+  });
   return jobs;
 };
 // helper   for query jobs
 const queryJobs = async (query) => {
   const jobs = await prisma.job.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     where: {
       OR: [
         { title: { contains: query, mode: 'insensitive' } },
@@ -80,5 +91,5 @@ module.exports = {
   get_single_job,
   removeJob,
   editJob,
-  checkDoubleJobCreation
+  checkDoubleJobCreation,
 };
