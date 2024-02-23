@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('./logger');
 
-
 exports.userSignToken = async (payload) => {
   try {
     const token = jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
@@ -13,17 +12,16 @@ exports.userSignToken = async (payload) => {
   }
 };
 // set invalid
-exports.setInvalidToken = (loggedout) =>
-  jwt.sign({ loggedout }, process.env.JWT_SECRET, {
-    expiresIn: 60,
-  });
+exports.setInvalidToken = (loggedout) => jwt.sign({ loggedout }, process.env.JWT_SECRET, {
+  expiresIn: 60,
+});
 
 // verify  token
 
 exports.verifyUserToken = (req, res, next) => {
   if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization
+    && req.headers.authorization.startsWith('Bearer')
   ) {
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
@@ -38,7 +36,7 @@ exports.verifyUserToken = (req, res, next) => {
       req.user = verified;
       next();
     } catch (error) {
-      res.status(403).json({
+      return res.status(403).json({
         status: 'fail',
         message: 'Invalid Token',
         token,

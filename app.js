@@ -8,10 +8,10 @@ const methodOverride = require('method-override');
 require('dotenv').config();
 
 const cors = require('cors');
+const { error } = require('console');
 const logger = require('./utils/logger');
 const { run } = require('./utils/setup');
 const approute = require('./routes/index');
-const { error } = require('console');
 
 const app = express();
 const port = 3000;

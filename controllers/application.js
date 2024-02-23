@@ -16,8 +16,8 @@ exports.applyJob = async (req, res, next) => {
   try {
     const data = req.body;
     data.status = 'Submitted';
-    /*error handler to prevent double application
-     we want to make sure the user doesnt apply for the same job more than once*/
+    /* error handler to prevent double application
+     we want to make sure the user doesnt apply for the same job more than once */
     const check = await preventDoubleApplication(data.userId, data.jobId);
     if (check) {
       throw new Error('User has already applied for the same job!');
@@ -209,7 +209,9 @@ exports.declineApplication = async (req, res, next) => {
   }
 };
 
-/*Controller to update multiple  applications  by thier ids
+//  might not need this functionality
+
+/* Controller to update multiple  applications  by thier ids
 exports.updateApplication = async (req, res, next) => {
   try {
     const { applicationIds, ...rest } = req.body;

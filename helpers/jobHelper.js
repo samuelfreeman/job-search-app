@@ -28,6 +28,16 @@ const getJobs = async () => {
   });
   return jobs;
 };
+// Get all jobs in a location
+const getLocationJobs = async (id) => {
+  const jobs = await prisma.job.findMany({
+    where: {
+      locationId: id,
+    },
+  });
+  return jobs;
+};
+
 // helper   for query jobs
 const queryJobs = async (query) => {
   const jobs = await prisma.job.findMany({
@@ -90,6 +100,7 @@ module.exports = {
   queryJobs,
   get_single_job,
   removeJob,
+  getLocationJobs,
   editJob,
   checkDoubleJobCreation,
 };

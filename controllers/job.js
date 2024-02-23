@@ -8,6 +8,7 @@ const {
   removeJob,
   editJob,
   checkDoubleJobCreation,
+  getLocationJobs,
 } = require('../helpers/jobHelper');
 
 // Controller to add a new job
@@ -18,19 +19,18 @@ exports.addJob = async (req, res, next) => {
     const checkJob = await checkDoubleJobCreation(data.title);
     if (checkJob) {
       return res.status(400).json({
-        statu:"Unsuccesful",
-        message:"Job is already available!"
-      })
-    } else {
-      // Create a new job
-      const job = await createJob(data);
-      // Respond with success message and job information
-      res.status(200).json({
-        status: 'Successful',
-        message: 'Job Created',
-        job,
+        statu: 'Unsuccesful',
+        message: 'Job is already available!',
       });
     }
+    // Create a new job
+    const job = await createJob(data);
+    // Respond with success message and job information
+    res.status(200).json({
+      status: 'Successful',
+      message: 'Job Created',
+      job,
+    });
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
@@ -57,8 +57,21 @@ exports.getAllJobs = async (req, res, next) => {
   }
 };
 
+// controller to get jobs in a single location
+exports.getLocation_Jobss = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const jobs = await getLocationJobs(id);
+    res.status(200).json({
+      jobs,
+    });
+  } catch (error) {
+    logger.error(error);
+    next(error);
+  }
+};
 // Controller to search for jobs by title or category
-exports.getJobs = async (req, res) => {
+exports.getJobs = async (req, res, next) => {
   try {
     const { query } = req.query;
 

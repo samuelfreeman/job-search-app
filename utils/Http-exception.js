@@ -46,7 +46,7 @@ class CustomError extends Error {
 
 module.exports = CustomError;
 
-/* eslint-disable no-undef*/
+/* eslint-disable no-undef */
 /* class CustomError extends Error {
   constructor(status, ...args) {
     super(...args);

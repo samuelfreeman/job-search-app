@@ -14,7 +14,11 @@ beforeAll(async () => {
   await prisma.$connect();
 });
 const data = {
-  id: '216376@#$@#jsdfsk',
+  id: '216376@#$@#jsdusk',
+  status: 'Accepted',
+};
+const data2 = {
+  id: '2163769823jsdusk',
   status: 'Accepted',
 };
 const arrayData = [
@@ -74,7 +78,7 @@ describe('application operations ', () => {
   // create a single application
   it('should create an application', async () => {
     const application = await createSingleApplication(data);
-    
+
     expect(application).not.toBeNull();
   });
   // update many applications
@@ -94,4 +98,98 @@ describe('application operations ', () => {
     const application = await deleteApplication(data.id);
     expect(application).not.toBeNull();
   });
+});
+
+// tests for errors
+// import necessary modules and functions
+
+describe('application operations  Error tests', () => {
+  // ...
+
+  // should NOT create an application with invalid data
+  it('should not create an application with invalid data', async () => {
+    const invalidDataForCreation = {
+      // Missing required fields, for example, status
+      // Add any other missing or invalid fields based on your application's requirements
+      status: undefined,
+      // Or invalid 'status':
+      // status: 'InvalidStatus',
+    };
+
+    // Use try/catch to handle potential rejections
+    try {
+      const application = await createApplications(invalidDataForCreation);
+      // If the above line doesn't throw an error, fail the test
+      expect(application).toBeUndefined(); // Or any other appropriate assertion
+    } catch (error) {
+      // Expect an error to be thrown, indicating that invalid data is handled
+      expect(error).toBeDefined();
+    }
+  });
+
+  // ...
+
+  // should NOT find a single application with invalid ID
+  it('should not find a single application with invalid ID', async () => {
+    const invalidApplicationId = 'invalidID';
+
+    // Use try/catch to handle potential rejections
+    try {
+      const application = await find_single_Application(invalidApplicationId);
+      // If the above line doesn't throw an error, fail the test
+      expect(application).toBeUndefined(); // Or any other appropriate assertion
+    } catch (error) {
+      // Expect an error to be thrown, indicating that invalid ID is handled
+      expect(error).toBeDefined();
+    }
+  });
+
+  // ...
+
+  // should NOT update an application with invalid data
+  it('should not update an application with invalid data', async () => {
+    // Create a sample application to be updated
+    const createdApplication = await createSingleApplication(data2);
+
+    const invalidDataForUpdate = {
+      // Invalid status, for example, a status that doesn't conform to your application's allowed values
+      // Add any other invalid fields based on your application's requirements
+      status: 'InvalidStatus',
+    };
+
+    // Use try/catch to handle potential rejections
+    try {
+      const updatedApplication = await updateApplication(
+        createdApplication.id,
+        invalidDataForUpdate,
+      );
+      // If the above line doesn't throw an error, fail the test
+      expect(updatedApplication).toBeUndefined(); // Or any other appropriate assertion
+    } catch (error) {
+      // Expect an error to be thrown, indicating that invalid data is handled
+      expect(error).toBeDefined();
+    }
+  });
+
+  // ...
+
+  // should NOT delete an application with invalid ID
+  it('should not delete an application with invalid ID', async () => {
+    const invalidApplicationId = 'invalidID';
+
+    // Use try/catch to handle potential rejections
+    try {
+      const application = await deleteApplication(invalidApplicationId);
+      // If the above line doesn't throw an error, fail the test
+      expect(application).toBeUndefined(); // Or any other appropriate assertion
+    } catch (error) {
+      // Expect an error to be thrown, indicating that invalid ID is handled
+      expect(error).toBeDefined();
+    }
+  });
+  it('should delete the single application in the data object', async () => {
+    const application = await deleteApplication(data2.id);
+    expect(application).not.toBeNull();
+  });
+  // ...
 });

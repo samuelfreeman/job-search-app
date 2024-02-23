@@ -84,25 +84,24 @@ const preventDoubleApplication = async (user, job) => {
     return (application = await prisma.application.findFirst({
       where: { AND: [{ userId: user, jobId: job }] },
     }));
-  } else {
-    return (application = await prisma.application.findMany({
-      orderBy: [
+  }
+  return (application = await prisma.application.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+    where: {
+      AND: [
         {
-          createdAt: 'desc',
+          userId: user,
+          jobId: {
+            in: job,
+          },
         },
       ],
-      where: {
-        AND: [
-          {
-            userId: user,
-            jobId: {
-              in: job,
-            },
-          },
-        ],
-      },
-    }));
-  }
+    },
+  }));
 };
 
 module.exports = {

@@ -1,10 +1,11 @@
 const prisma = require('../utils/prisma');
-const createUser = async (data) => {
-  return (user = await prisma.user.create({
-    data,
-  }));
-};
 
+const createUser = async (data) => {
+  const user = await prisma.user.create({
+    data,
+  });
+  return user;
+};
 const getUsers = async () => {
   const user = await prisma.user.findMany({
     orderBy: [

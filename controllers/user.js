@@ -10,6 +10,7 @@ const {
   deleteUser,
   getSingleUser,
   applyJobs,
+  getAppliedJobs,
 } = require('../helpers/userHelper');
 
 // Controller to register a new user
@@ -57,36 +58,31 @@ exports.login = async (req, res, next) => {
     // Check if the user with the provided email exists
     const exists = await checkExits(data.email);
 
-    console.log(exists);
     if (!exists || exists == null) {
       logger.error('User account not found!');
       return res.status(404).json({
         message: 'User not found!',
       });
-    } else {
-      // Compare the provided password with the stored hashed password
-      const checkPass = await bcrypt.compare(
-        data.password,
-        exists.password,
-      );
-      if (!checkPass) {
-        logger.error('User Password or Email incorrect!');
-        return res.status(422).json({
-          message: 'Invalid credentials!',
-        });
-      }
-
-      // Generate and send an access token upon successful login
-      const token = await jwt.userSignToken(exists.id);
-
-      logger.info('User logged in successfully!');
-
-      res.status(200).json({
-        message: 'User successfully logged in!',
-        user: exists,
-        accessToken: token,
+    }
+    // Compare the provided password with the stored hashed password
+    const checkPass = await bcrypt.compare(data.password, exists.password);
+    if (!checkPass) {
+      logger.error('User Password or Email incorrect!');
+      return res.status(422).json({
+        message: 'Invalid credentials!',
       });
     }
+
+    // Generate and send an access token upon successful login
+    const token = await jwt.userSignToken(exists.id);
+
+    logger.info('User logged in successfully!');
+
+    return res.status(200).json({
+      message: 'User successfully logged in!',
+      user: exists,
+      accessToken: token,
+    });
   } catch (error) {
     logger.error(error);
     next(error);
@@ -123,7 +119,6 @@ exports.getAllUser = async (req, res, next) => {
     // Retrieve all users
     const users = await getUsers();
     // Remove password before sending the response
-    users.forEach((users) => delete users.password);
 
     // Respond with success message and the list of users
     res.status(200).json({

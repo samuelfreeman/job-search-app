@@ -2,11 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const { hash } = require('../utils/bcrypt');
+const { hash } = require('./bcrypt');
 
-const hashPwd = (password) => {
-  return hash(password);
-};
+const hashPwd = (password) => hash(password);
 
 prisma.$use(async (params, next) => {
   if (params.model === 'user') {

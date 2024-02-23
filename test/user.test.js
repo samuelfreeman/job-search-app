@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+
 const prisma = new PrismaClient();
 
 beforeAll(async () => {
@@ -35,13 +36,13 @@ describe('user operations', () => {
     expect(user.fullname).toBe('Test user');
     expect(user.email).toBe('Test@gmail.com');
   });
-  //gets user from the database
+  // gets user from the database
   it('should retrive a user', async () => {
     const user = await getSingleUser(data.id);
     expect(user).not.toBeNull();
     expect(user.email).toBe('Test@gmail.com');
   });
-  //test to get all users
+  // test to get all users
   it('should get all users', async () => {
     const users = await getUsers();
     expect(users).not.toBeNull();
@@ -54,8 +55,9 @@ describe('user operations', () => {
       password: 'passTest123@',
     };
     const user = await updateUser(data.id, dataUpdate);
+
     expect(user).not.toBeNull();
-    expect(user.password).toBe('passTest123@');
+    expect(user.fullname).toBe('testName updated');
   });
   //  get user applied jobs
   it('should get a users applied jobs', async () => {

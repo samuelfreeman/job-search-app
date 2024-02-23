@@ -16,7 +16,8 @@ const checkExits = async (email) => {
   }
 };
 
-// function to check if admin exists before moving to the next function : this function is for the login  operation
+// function to check if admin exists before moving to the next function :
+// this function is for the login  operation
 
 const checkAdminExists = async (email) => {
   try {
