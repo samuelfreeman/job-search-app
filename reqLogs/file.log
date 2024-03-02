@@ -6,3 +6,4 @@
 ::1 - - [02/Mar/2024:00:14:25 +0000] "POST /api/job/ HTTP/1.1" 200 550 "-" "PostmanRuntime/7.36.3"
 ::1 - - [02/Mar/2024:00:16:54 +0000] "POST /api/job/ HTTP/1.1" 400 61 "-" "PostmanRuntime/7.36.3"
 ::1 - - [02/Mar/2024:00:17:37 +0000] "POST /api/job/ HTTP/1.1" 200 563 "-" "PostmanRuntime/7.36.3"
+[0mPOST /api/job/ [33m400[0m 9634.342 ms - 61[0m

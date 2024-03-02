@@ -12,7 +12,6 @@ const morgan = require('morgan');
 
 const cors = require('cors');
 
-
 const { run } = require('./utils/setup');
 const approute = require('./routes/index');
 
@@ -29,7 +28,8 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(compression());
 app.use(helmet());
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(morgan('dev', { stream: accessLogStream }));
+
 app.use('/api', approute);
 app.get('/', async (req, res) => {
   res.status(200).json({
@@ -39,9 +39,6 @@ app.get('/', async (req, res) => {
 });
 run();
 
-app.get('/test-error', (req, res) => {
-  throw new Error('This is a new Error');
-});
 
 app.use((err, req, res, next) => {
   // console.error(err.stack); // Log the error stack trace
@@ -53,3 +50,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`.cyan);
 });
+// quantitative = numeric form
+//
