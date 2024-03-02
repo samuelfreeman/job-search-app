@@ -1,0 +1,8 @@
+::1 - - [02/Mar/2024:00:07:20 +0000] "POST /api/user/signUp HTTP/1.1" 201 451 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:10:48 +0000] "POST /api/cartegory/ HTTP/1.1" 201 333 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:12:30 +0000] "POST /api/job/ HTTP/1.1" 500 1001 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:13:17 +0000] "POST /api/job/ HTTP/1.1" 500 1001 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:13:50 +0000] "POST /api/job/ HTTP/1.1" 500 1001 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:14:25 +0000] "POST /api/job/ HTTP/1.1" 200 550 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:16:54 +0000] "POST /api/job/ HTTP/1.1" 400 61 "-" "PostmanRuntime/7.36.3"
+::1 - - [02/Mar/2024:00:17:37 +0000] "POST /api/job/ HTTP/1.1" 200 563 "-" "PostmanRuntime/7.36.3"

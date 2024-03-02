@@ -58,6 +58,10 @@ CREATE TABLE "job" (
 
     CONSTRAINT "job_pkey" PRIMARY KEY ("id")
 );
+-- Define a composite type in PostgreSQL
+
+
+
 
 -- CreateTable
 CREATE TABLE "application" (

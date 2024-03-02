@@ -98,3 +98,6 @@ module.exports = {
   applyJobs,
   getAppliedJobs,
 };
+
+
+// edit user should allow user to be able to edit admin and user 
