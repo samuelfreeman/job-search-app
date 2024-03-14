@@ -10,6 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator erd {
+  provider    = "prisma-erd-generator"
+  theme       = "dark"
+  ignoreEnums = "true"
+  output      = "../ERD.png"
+}
+
 model user {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   fullname    String
