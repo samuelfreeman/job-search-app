@@ -2,12 +2,12 @@
   "name": "job-search-app",
   "version": "1.0.0",
   "description": "A job search app for users to find a job ",
-  "main": "app.js",
+  "main": "Backend/app.js",
   "scripts": {
     "lint": "npx eslint --fix ./",
     "format": "npx prettier . --write",
     "test": "jest .",
-    "launch": "node --watch app.js",
+    "launch": "node --watch Backend/app.js",
     "generate": "npx prisma generate",
     "migrate:dev": "npx prisma migrate dev"
   },
