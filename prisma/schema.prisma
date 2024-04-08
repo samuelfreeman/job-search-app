@@ -17,6 +17,13 @@ generator erd {
   output      = "../ERD.png"
 }
 
+model admin {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  fullname String
+  email    String
+  password String
+}
+
 model user {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   fullname    String

@@ -8,7 +8,13 @@ const addLocation = async (data) => {
 };
 //  loading location
 const loadLocations = async () => {
-  const locations = await prisma.location.findMany({});
+  const locations = await prisma.location.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
+  });
   return locations;
 };
 
