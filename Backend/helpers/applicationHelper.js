@@ -79,7 +79,10 @@ const deleteApplication = async (id) => {
   });
   return application;
 };
-const preventDoubleApplication = async (user, job) => {
+const preventDoubleApplication = async (user,job) => {
+
+
+
   if (job.length === 0) {
     const application = await prisma.application.findFirst({
       where: { AND: [{ userId: user, jobId: job }] },

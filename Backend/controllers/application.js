@@ -19,6 +19,7 @@ exports.applyJob = async (req, res, next) => {
     /* error handler to prevent double application
      we want to make sure the user doesnt apply for the same job more than once */
     const check = await preventDoubleApplication(data.userId, data.jobId);
+    console.log(check)
     if (check) {
       throw new Error('User has already applied for the same job!');
     }
@@ -32,7 +33,7 @@ exports.applyJob = async (req, res, next) => {
     });
   } catch (error) {
     // Log and pass the error to the next middleware
-    logger.error(error);
+    // logger.error(error);
 
     next(error);
   }
@@ -44,7 +45,10 @@ exports.bulkApplication = async (req, res, next) => {
     const { userId, jobIds } = req.body;
     // error handler to prevent double application
     const check = await preventDoubleApplication(userId, jobIds);
-    if (check) {
+    
+    if (check.length !==0) {
+      
+
       throw new Error('User has already applied for the same job!');
     }
     // Create multiple applications for the specified jobs
@@ -62,6 +66,7 @@ exports.bulkApplication = async (req, res, next) => {
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
+    console.log(error)
 
     next(error);
   }
