@@ -15,7 +15,7 @@ userRoute.patch('/:id', authenticate, user.updateUser);
 userRoute.delete('/:id', authenticate, user.deleteUser);
 userRoute.get('/:id', authenticate, user.getUser);
 userRoute.get('/', authenticate, user.getAllUser);
-userRoute.get('/:id/appliedJobs', authenticate, user.getAppliedJobs);
+userRoute.get('/:id/appliedJobs',  user.getAppliedJobs);
 userRoute.get('/:id/applications/:status', authenticate, user.getAllApplicationsByStatus);
 
 module.exports = userRoute;
