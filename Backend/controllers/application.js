@@ -9,6 +9,7 @@ const {
   createSingleApplication,
   find_single_Application,
   preventDoubleApplication,
+  updateOneApplication,
 } = require('../helpers/applicationHelper');
 
 // Controller to apply for a single job
@@ -19,7 +20,7 @@ exports.applyJob = async (req, res, next) => {
     /* error handler to prevent double application
      we want to make sure the user doesnt apply for the same job more than once */
     const check = await preventDoubleApplication(data.userId, data.jobId);
-    console.log(check)
+    console.log(check);
     if (check) {
       throw new Error('User has already applied for the same job!');
     }
@@ -45,10 +46,8 @@ exports.bulkApplication = async (req, res, next) => {
     const { userId, jobIds } = req.body;
     // error handler to prevent double application
     const check = await preventDoubleApplication(userId, jobIds);
-    
-    if (check.length !==0) {
-      
 
+    if (check.length !== 0) {
       throw new Error('User has already applied for the same job!');
     }
     // Create multiple applications for the specified jobs
@@ -66,22 +65,22 @@ exports.bulkApplication = async (req, res, next) => {
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
-    console.log(error)
+    console.log(error);
 
     next(error);
   }
 };
 exports.updateMultipleApplications = async (req, res, next) => {
   try {
-    const { applicationIds, ...rest } = req.body;
+    const { applicationId, status } = req.body;
 
-    const updatedApplications = updateManyAppications(applicationIds, rest);
-
+    const updatedApplication = await updateOneApplication(applicationId, status);
+console.log(updateApplication)
     // Respond with success message and updated applications information
     res.status(200).json({
       status: 'Successful',
-      message: 'Applications Updated',
-      updatedApplications,
+      message: 'Application Updated',
+      updatedApplication,
     });
   } catch (error) {
     // Log and pass the error to the next middleware

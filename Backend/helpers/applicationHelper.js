@@ -35,6 +35,18 @@ const updateManyAppications = async (applicationIds, data) => {
   });
   return application;
 };
+const updateOneApplication = async (applicationId, data) => {
+  const application = await prisma.application.update({
+    where: {
+      id: applicationId,
+    },
+    data:{
+      status:data
+    }
+  });
+  return application;
+};
+
 const find_single_Application = async (id) => {
   const application = await prisma.application.findUnique({
     where: {
@@ -79,36 +91,32 @@ const deleteApplication = async (id) => {
   });
   return application;
 };
-const preventDoubleApplication = async (user,job) => {
-
-
-
+const preventDoubleApplication = async (user, job) => {
   if (job.length === 0) {
     const application = await prisma.application.findFirst({
       where: { AND: [{ userId: user, jobId: job }] },
     });
     return application;
-  }else{
-
+  } else {
     const application = await prisma.application.findMany({
       orderBy: [
         {
           createdAt: 'desc',
-      },
-    ],
-    where: {
-      AND: [
-        {
-          userId: user,
-          jobId: {
-            in: job,
-          },
         },
       ],
-    },
-  });
-  return application;
-}
+      where: {
+        AND: [
+          {
+            userId: user,
+            jobId: {
+              in: job,
+            },
+          },
+        ],
+      },
+    });
+    return application;
+  }
 };
 
 module.exports = {
@@ -121,4 +129,5 @@ module.exports = {
   createSingleApplication,
   find_single_Application,
   preventDoubleApplication,
+  updateOneApplication
 };

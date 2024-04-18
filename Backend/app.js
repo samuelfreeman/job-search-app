@@ -23,7 +23,12 @@ const accessLogStream = rfs.createStream('file.log', {
   path: path.join(__dirname, 'reqLogs'),
 });
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+  cors({
+    origin: 'https://vite-project-1-lsk3.onrender.com',
+    credentials: true,
+  }),
+);
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(compression());
@@ -38,7 +43,6 @@ app.get('/', async (req, res) => {
   });
 });
 run();
-
 
 app.use((err, req, res, next) => {
   // console.error(err.stack); // Log the error stack trace
