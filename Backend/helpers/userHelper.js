@@ -45,12 +45,7 @@ const deleteUser = async (id) => {
 };
 
 const applyJobs = async (id) => {
-  const user = await prisma.user.findMany({
-    orderBy: [
-      {
-        createdAt: 'desc',
-      },
-    ],
+  const user = await prisma.user.findFirst({
     where: {
       id,
     },
@@ -99,5 +94,4 @@ module.exports = {
   getAppliedJobs,
 };
 
-
-// edit user should allow user to be able to edit admin and user 
+// edit user should allow user to be able to edit admin and user
