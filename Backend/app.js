@@ -25,7 +25,7 @@ const accessLogStream = rfs.createStream('file.log', {
 
 app.use(
   cors({
-    origin: 'https://vite-project-1-lsk3.onrender.com',
+    origin: true ,
     credentials: true,
   }),
 );
