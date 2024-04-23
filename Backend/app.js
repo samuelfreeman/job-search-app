@@ -34,18 +34,18 @@ app.use(methodOverride());
 app.use(compression());
 app.use(helmet());
 app.use(morgan('dev', { stream: accessLogStream }));
-app.use((req, res, next) => {
-  try {
-    if (new URL(req.query.url).host === 'example.com') {
-      return res
-        .status(400)
-        .end(`Unsupported redirect to host :${req.query.url}`);
-    }
-  } catch (error) {
-    return res.status(400).end(`Invalid url:${req.query.url}`);
-  }
-  res.redirect(req.query.url);
-});
+// app.use((req, res, next) => {
+//   try {
+//     if (new URL(req.query.url).host === 'example.com') {
+//       return res
+//         .status(400)
+//         .end(`Unsupported redirect to host :${req.query.url}`);
+//     }
+//   } catch (error) {
+//     return res.status(400).end(`Invalid url:${req.query.url}`);
+//   }
+//   res.redirect(req.query.url);
+// });
 
 // const count = io.engine.clientsCount;
 // const count2 = io.of('/').sockets.size;

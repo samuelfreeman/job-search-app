@@ -51,8 +51,8 @@ const deleteUser = async (id) => {
 const applyJobs = async (id) => {
   const user = await prisma.user.findFirst({
     cacheStrategy: {
-      swr: 60,
-      ttl: 60,
+      swr: 30,
+      ttl: 30,
     },
     where: {
       id,

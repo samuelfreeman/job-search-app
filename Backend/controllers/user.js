@@ -149,7 +149,9 @@ exports.getAppliedJobs = async (req, res, next) => {
     res.status(200).json({
       appliedJobs: applied,
     });
+    
   } catch (error) {
+    console.log("error")
     // Log and pass the error to the next middleware
     logger.error(error);
     next(error);
