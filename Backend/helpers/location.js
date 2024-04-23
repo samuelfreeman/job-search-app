@@ -9,6 +9,10 @@ const addLocation = async (data) => {
 //  loading location
 const loadLocations = async () => {
   const locations = await prisma.location.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -21,6 +25,10 @@ const loadLocations = async () => {
 // loading a single location
 const loadLocation = async (id) => {
   const location = await prisma.location.findUnique({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       id,
     },

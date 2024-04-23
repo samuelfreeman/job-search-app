@@ -25,7 +25,11 @@ exports.register = async (req, res, next) => {
     });
   } else {
     try {
+      //  hash the password
+      const hashedPassword = await bcrypt.hash(data.password);
+      data.password = hashedPassword;
       // Create a new user
+
       const user = await createUser(data);
 
       // Generate JWT token for the user
@@ -157,7 +161,10 @@ exports.updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
-
+    if (data.password) {
+      const hashedPassword = await bcrypt.hash(data.password);
+      data.password = hashedPassword;
+    }
     // Find the user by ID
     const user = await getSingleUser(id);
 

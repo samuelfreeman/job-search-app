@@ -40,9 +40,9 @@ const updateOneApplication = async (applicationId, data) => {
     where: {
       id: applicationId,
     },
-    data:{
-      status:data
-    }
+    data: {
+      status: data,
+    },
   });
   return application;
 };
@@ -51,6 +51,10 @@ const find_single_Application = async (id) => {
   const application = await prisma.application.findUnique({
     where: {
       id,
+    },
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
     },
   });
 
@@ -63,6 +67,10 @@ const findApplications = async () => {
         createdAt: 'desc',
       },
     ],
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
   });
   return application;
 };
@@ -73,6 +81,10 @@ const find_application_status = async (status) => {
         createdAt: 'desc',
       },
     ],
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       status,
     },
@@ -94,6 +106,10 @@ const deleteApplication = async (id) => {
 const preventDoubleApplication = async (user, job) => {
   if (job.length === 0) {
     const application = await prisma.application.findFirst({
+      cacheStrategy: {
+        swr: 60,
+        ttl: 60,
+      },
       where: { AND: [{ userId: user, jobId: job }] },
     });
     return application;
@@ -129,5 +145,5 @@ module.exports = {
   createSingleApplication,
   find_single_Application,
   preventDoubleApplication,
-  updateOneApplication
+  updateOneApplication,
 };

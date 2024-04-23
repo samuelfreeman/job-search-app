@@ -1,5 +1,5 @@
 const logger = require('../utils/logger');
-
+const io = require("../app")
 const {
   createJob,
   getJobs,
@@ -10,7 +10,6 @@ const {
   checkDoubleJobCreation,
   getLocationJobs,
 } = require('../helpers/jobHelper');
-
 // Controller to add a new job
 exports.addJob = async (req, res, next) => {
   try {
@@ -34,7 +33,7 @@ exports.addJob = async (req, res, next) => {
   } catch (error) {
     // Log and pass the error to the next middleware
     logger.error(error);
-
+    
     next(error);
   }
 };
@@ -44,15 +43,16 @@ exports.getAllJobs = async (req, res, next) => {
   try {
     // Retrieve all jobs
     const jobs = await getJobs();
-
+    
     // Respond with the list of jobs
     res.status(200).json({
       jobs,
     });
   } catch (error) {
     // Log and pass the error to the next middleware
+    
     logger.error(error);
-
+    
     next(error);
   }
 };
@@ -79,6 +79,7 @@ exports.getJobs = async (req, res, next) => {
     const jobs = await queryJobs(query);
 
     // Respond with the list of jobs matching the query
+    
     res.status(200).json({ jobs });
   } catch (error) {
     // Log and pass the error to the next middleware

@@ -16,6 +16,10 @@ const createSingleCategory = async (data) => {
 
 const findCartegories = async (id) => {
   const cartegories = await prisma.job.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -34,6 +38,10 @@ const findCartegories = async (id) => {
 
 const queryCartegories = async (query) => {
   const cartegories = await prisma.cartegory.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -52,6 +60,10 @@ const queryCartegories = async (query) => {
 
 const singleCartegory = async (id) => {
   const cartegory = await prisma.cartegory.findFirst({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       id,
     },

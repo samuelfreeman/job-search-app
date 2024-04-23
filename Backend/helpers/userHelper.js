@@ -8,6 +8,10 @@ const createUser = async (data) => {
 };
 const getUsers = async () => {
   const user = await prisma.user.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -46,6 +50,10 @@ const deleteUser = async (id) => {
 
 const applyJobs = async (id) => {
   const user = await prisma.user.findFirst({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       id,
     },
@@ -64,6 +72,10 @@ const applyJobs = async (id) => {
 };
 const getAppliedJobs = async (userId, status) => {
   const user = await prisma.application.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',

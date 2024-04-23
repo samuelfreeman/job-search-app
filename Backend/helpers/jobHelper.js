@@ -9,6 +9,10 @@ const createJob = async (data) => {
 
 const checkDoubleJobCreation = async (name) => {
   const getJob = await prisma.job.findFirst({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       title: {
         contains: `${name}`,
@@ -20,6 +24,10 @@ const checkDoubleJobCreation = async (name) => {
 // helper function for getting all jobs
 const getJobs = async () => {
   const jobs = await prisma.job.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -31,6 +39,10 @@ const getJobs = async () => {
 // Get all jobs in a location
 const getLocationJobs = async (id) => {
   const jobs = await prisma.job.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       locationId: id,
     },
@@ -41,6 +53,10 @@ const getLocationJobs = async (id) => {
 // helper   for query jobs
 const queryJobs = async (query) => {
   const jobs = await prisma.job.findMany({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     orderBy: [
       {
         createdAt: 'desc',
@@ -61,6 +77,10 @@ const queryJobs = async (query) => {
 //  helper to get a single job
 const get_single_job = async (id) => {
   const job = await prisma.job.findFirst({
+    cacheStrategy: {
+      swr: 60,
+      ttl: 60,
+    },
     where: {
       id,
     },
